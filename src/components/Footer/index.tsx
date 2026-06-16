@@ -1,157 +1,79 @@
-import { Row, Col } from "antd";
-import { withTranslation } from "react-i18next";
-import { SvgIcon } from "../../common/SvgIcon";
-import Container from "../../common/Container";
-
-import i18n from "i18next";
+import siteContent from "../../content/SiteContent.json";
 import {
   FooterSection,
-  Title,
-  NavLink,
-  Extra,
-  LogoContainer,
-  Para,
-  Large,
-  Chat,
-  Empty,
-  FooterContainer,
-  Language,
-  Label,
-  LanguageSwitch,
-  LanguageSwitchContainer,
+  FooterInner,
+  FooterBrandColumn,
+  FooterBrand,
+  FooterTag,
+  FooterButton,
+  FooterInlineLinks,
+  FooterSocialRow,
+  FooterSocialButton,
+  FooterBottom,
+  FooterColumns,
+  FooterGroup,
+  FooterGroupTitle,
+  FooterLink,
 } from "./styles";
 
-interface SocialLinkProps {
-  href: string;
-  src: string;
-}
-
-const Footer = ({ t }: any) => {
-  const handleChange = (language: string) => {
-    i18n.changeLanguage(language);
-  };
-
-  const SocialLink = ({ href, src }: SocialLinkProps) => {
-    return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        key={src}
-        aria-label={src}
-      >
-        <SvgIcon src={src} width="25px" height="25px" />
-      </a>
-    );
-  };
+const Footer = () => {
+  const source = typeof window !== "undefined" ? window.location.hostname : "divvylore.com";
+  const registerUrl = `${siteContent.appUrls.register}?source=${encodeURIComponent(source)}&placement=footer`;
+  const loginUrl = `${siteContent.appUrls.login}?source=${encodeURIComponent(source)}&placement=footer`;
+  const privacyUrl = `${siteContent.appUrls.base}/privacy-policy`;
+  const termsUrl = `${siteContent.appUrls.base}/terms-and-conditions`;
 
   return (
-    <>
-      <FooterSection>
-        <Container>
-          <Row justify="space-between">
-            <Col lg={10} md={10} sm={12} xs={12}>
-              <Language>{t("Contact")}</Language>
-              <Large to="/">{t("Tell us everything")}</Large>
-              <Para>
-                {t(`Do you have any question? Feel free to reach out.`)}
-              </Para>
-              <a href="mailto:divvvylore@outlook.com">
-                <Chat>{t(`Let's Chat`)}</Chat>
-              </a>
-            </Col>
-            <Col lg={8} md={8} sm={12} xs={12}>
-              <Title>{t("Policy")}</Title>
-              <Large to="/" left="true">
-                {t("Application Security")}
-              </Large>
-              <Large left="true" to="/">
-                {t("Software Principles")}
-              </Large>
-            </Col>
-            <Col lg={6} md={6} sm={12} xs={12}>
-              <Empty />
-              <Large left="true" to="/">
-                {t("Support Center")}
-              </Large>
-              <Large left="true" to="/">
-                {t("Customer Support")}
-              </Large>
-            </Col>
-          </Row>
-          <Row justify="space-between">
-            <Col lg={10} md={10} sm={12} xs={12}>
-              <Empty />
-              <Language>{t("Address")}</Language>
-              <Para>R3 society, Life Republic</Para>
-              <Para>Pune, Hinjewadi</Para>
-              <Para>Maharashtra, India</Para>
-            </Col>
-            <Col lg={8} md={8} sm={12} xs={12}>
-              <Title>{t("Company")}</Title>
-              <Large left="true" to="/">
-                {t("About")}
-              </Large>
-              <Large left="true" to="/">
-                {t("Blog")}
-              </Large>
-            </Col>
-            <Col lg={6} md={6} sm={12} xs={12}>
-              <Label htmlFor="select-lang">{t("Language")}</Label>
-              <LanguageSwitchContainer>
-                <LanguageSwitch onClick={() => handleChange("en")}>
-                  <SvgIcon
-                    src="united-states.svg"
-                    aria-label="homepage"
-                    width="30px"
-                    height="30px"
-                  />
-                </LanguageSwitch>
-                <LanguageSwitch onClick={() => handleChange("es")}>
-                  <SvgIcon
-                    src="spain.svg"
-                    aria-label="homepage"
-                    width="30px"
-                    height="30px"
-                  />
-                </LanguageSwitch>
-              </LanguageSwitchContainer>
-            </Col>
-          </Row>
-        </Container>
-      </FooterSection>
-      <Extra>
-        <Container border={true}>
-          <Row
-            justify="space-between"
-            align="middle"
-            style={{ paddingTop: "3rem" }}
-          >
-            <NavLink to="/">
-              <LogoContainer>
-                <SvgIcon
-                  src="logo.svg"
-                  aria-label="homepage"
-                  width="101px"
-                  height="64px"
-                />
-              </LogoContainer>
-            </NavLink>
-            <FooterContainer>
-              <SocialLink
-                href="https://twitter.com/divvylore"
-                src="twitter.svg"
-              />
-              <SocialLink
-                href="https://www.linkedin.com/in/divvylore/"
-                src="linkedin.svg"
-              />
-            </FooterContainer>
-          </Row>
-        </Container>
-      </Extra>
-    </>
+    <FooterSection>
+      <FooterInner>
+        <FooterBrandColumn>
+          <FooterBrand>{siteContent.brand.name}</FooterBrand>
+          <FooterTag>{siteContent.brand.tagline}</FooterTag>
+
+          <FooterInlineLinks>
+            <FooterButton href={registerUrl}>Get Started</FooterButton>
+            <FooterButton href={loginUrl}>Login</FooterButton>
+            <FooterButton href="#">Contact</FooterButton>
+          </FooterInlineLinks>
+
+          <FooterSocialRow>
+            <FooterSocialButton href="#" aria-label="LinkedIn">in</FooterSocialButton>
+            <FooterSocialButton href="#" aria-label="Instagram">ig</FooterSocialButton>
+            <FooterSocialButton href="#" aria-label="X">x</FooterSocialButton>
+            <FooterSocialButton href="#" aria-label="YouTube">yt</FooterSocialButton>
+          </FooterSocialRow>
+
+          <FooterBottom>{siteContent.footer.copyright}</FooterBottom>
+        </FooterBrandColumn>
+
+        <FooterColumns>
+          <FooterGroup>
+            <FooterGroupTitle>Product</FooterGroupTitle>
+            <FooterLink href="#highlights">Overview</FooterLink>
+            <FooterLink href="#how-it-works">How it works</FooterLink>
+            <FooterLink href="#features">Capabilities</FooterLink>
+          </FooterGroup>
+
+          <FooterGroup>
+            <FooterGroupTitle>Resources</FooterGroupTitle>
+            <FooterLink href="#security">Security</FooterLink>
+            <FooterLink href="#pricing">Pricing</FooterLink>
+            <FooterLink href="#faq">FAQ</FooterLink>
+            <FooterLink href={registerUrl}>Register</FooterLink>
+          </FooterGroup>
+
+          <FooterGroup>
+            <FooterGroupTitle>Company</FooterGroupTitle>
+            <FooterLink href={siteContent.appUrls.base}>Platform</FooterLink>
+            <FooterLink href={loginUrl}>Sign in</FooterLink>
+            <FooterLink href={registerUrl}>Create account</FooterLink>
+            <FooterLink href={privacyUrl}>Privacy policy</FooterLink>
+            <FooterLink href={termsUrl}>Terms and conditions</FooterLink>
+          </FooterGroup>
+        </FooterColumns>
+      </FooterInner>
+    </FooterSection>
   );
 };
 
-export default withTranslation()(Footer);
+export default Footer;

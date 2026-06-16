@@ -1,54 +1,46 @@
 import { createGlobalStyle } from "styled-components";
 
 export const Styles = createGlobalStyle`
-
-    @font-face {
-        font-family: "Motiva Sans Light";
-        src: url("/fonts/Motiva-Sans-Light.ttf") format("truetype");
-        font-style: normal;
+    :root {
+        --bg-page: #f7f9ff;
+        --text-primary: #111f42;
+        --text-secondary: #4a5a82;
     }
 
-    @font-face {
-        font-family: "Motiva Sans Bold";
-        src: url("/fonts/Motiva-Sans-Bold.ttf") format("truetype");
-        font-style: normal;
-    }
-
-
-    body,
     html,
-    a {
-        font-family: 'Motiva Sans Light', sans-serif;
-    }
-
-
-    body {
-        margin:0;
-        padding:0;
-        border: 0;
-        outline: 0;
-        background: #fff;
-        overflow-x: hidden;
-    }
-
-    a:hover {
-        color: #18216d;
-    }
-
+    body,
+    a,
+    button,
     input,
     textarea {
-        border-radius: 4px;
-        border: 0;
-        background: rgb(241, 242, 243);
-        transition: all 0.3s ease-in-out;  
-        outline: none;
-        width: 100%;  
-        padding: 1rem 1.25rem;
+        font-family: 'Manrope', sans-serif;
+    }
 
-        :focus-within {
-            background: none;
-            box-shadow: #2e186a 0px 0px 0px 1px;
-        }
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        border: 0;
+                background: var(--bg-page);
+        color: var(--text-primary);
+        overflow-x: hidden;
+        min-height: 100vh;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    img,
+    svg,
+    video {
+        max-width: 100%;
+        height: auto;
     }
 
     h1,
@@ -57,56 +49,33 @@ export const Styles = createGlobalStyle`
     h4,
     h5,
     h6 {
-        font-family: 'Motiva Sans Bold', serif;
-        color: #18216d;
-        font-size: 56px;
-        line-height: 1.18;
-
-        @media only screen and (max-width: 890px) {
-          font-size: 47px;
-        }
-      
-        @media only screen and (max-width: 414px) {
-          font-size: 32px;
-        }
+        font-family: 'Space Grotesk', sans-serif;
+        margin: 0;
     }
 
     p {
-        color: #18216d;
-        font-size: 21px;        
-        line-height: 1.41;
-    }
-
-    h1 {
-        font-weight: 600;
+        line-height: 1.6;
+        letter-spacing: 0.01em;
     }
 
     a {
         text-decoration: none;
-        outline: none;
-        color: #2E186A;
+        color: inherit;
+    }
 
-        :hover {
-            color: #2e186a;
+    ::selection {
+        background: rgba(135, 190, 255, 0.35);
+        color: #ffffff;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
         }
-    }
-    
-    *:focus {
-        outline: none;
-    }
-
-    .about-block-image svg {
-        text-align: center;
-    }
-
-    .ant-drawer-body {
-        display: flex;
-        flex-direction: column;
-        text-align: left;
-        padding-top: 1.5rem;
-    }
-
-    .ant-drawer-content-wrapper {
-        width: 300px !important;
     }
 `;

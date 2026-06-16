@@ -1,93 +1,101 @@
 import { useState } from "react";
-import { Row, Col, Drawer } from "antd";
-import { withTranslation } from "react-i18next";
-import Container from "../../common/Container";
-import { SvgIcon } from "../../common/SvgIcon";
-import { Button } from "../../common/Button";
+import siteContent from "../../content/SiteContent.json";
 import {
   HeaderSection,
-  LogoContainer,
-  Burger,
-  NotHidden,
-  Menu,
-  CustomNavLinkSmall,
-  Label,
-  Outline,
-  Span,
+  HeaderInner,
+  Brand,
+  BrandMark,
+  BrandText,
+  BrandName,
+  BrandTagline,
+  Nav,
+  NavLink,
+  OverflowWrap,
+  OverflowButton,
+  OverflowMenu,
+  Actions,
+  GhostButton,
+  PrimaryButton,
+  MobileMenuButton,
+  MobilePanel,
 } from "./styles";
 
-const Header = ({ t }: any) => {
-  const [visible, setVisibility] = useState(false);
-
-  const showDrawer = () => {
-    setVisibility(!visible);
-  };
-
-  const onClose = () => {
-    setVisibility(!visible);
-  };
-
-  const MenuItem = () => {
-    const scrollTo = (id: string) => {
-      const element = document.getElementById(id) as HTMLDivElement;
-      element.scrollIntoView({
-        behavior: "smooth",
-      });
-      setVisibility(false);
-    };
-    return (
-      <>
-        <CustomNavLinkSmall onClick={() => scrollTo("about")}>
-          <Span>{t("About")}</Span>
-        </CustomNavLinkSmall>
-        <CustomNavLinkSmall onClick={() => scrollTo("mission")}>
-          <Span>{t("Mission")}</Span>
-        </CustomNavLinkSmall>
-        <CustomNavLinkSmall onClick={() => scrollTo("product")}>
-          <Span>{t("Product")}</Span>
-        </CustomNavLinkSmall>
-        <CustomNavLinkSmall
-          style={{ width: "180px" }}
-          onClick={() => scrollTo("contact")}
-        >
-          <Span>
-            <Button>{t("Contact")}</Button>
-          </Span>
-        </CustomNavLinkSmall>
-      </>
-    );
-  };
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOverflowOpen, setIsOverflowOpen] = useState(false);
+  const source = typeof window !== "undefined" ? window.location.hostname : "divvylore.com";
+  const registerUrl = `${siteContent.appUrls.register}?source=${encodeURIComponent(source)}&placement=header`;
+  const loginUrl = `${siteContent.appUrls.login}?source=${encodeURIComponent(source)}&placement=header`;
+  const primaryDesktopNav = siteContent.navigation.slice(0, 5);
+  const overflowDesktopNav = siteContent.navigation.slice(5);
 
   return (
     <HeaderSection>
-      <Container>
-        <Row justify="space-between">
-          <LogoContainer to="/" aria-label="homepage">
-            <SvgIcon src="logo.svg" width="101px" height="64px" />
-          </LogoContainer>
-          <NotHidden>
-            <MenuItem />
-          </NotHidden>
-          <Burger onClick={showDrawer}>
-            <Outline />
-          </Burger>
-        </Row>
-        <Drawer closable={false} visible={visible} onClose={onClose}>
-          <Col style={{ marginBottom: "2.5rem" }}>
-            <Label onClick={onClose}>
-              <Col span={12}>
-                <Menu>Menu</Menu>
-              </Col>
-              <Col span={12}>
-                <Outline />
-              </Col>
-            </Label>
-          </Col>
-          <MenuItem />
-        </Drawer>
-      </Container>
+      <HeaderInner>
+        <Brand href="/" aria-label="Divvylore home">
+          <BrandMark src="/img/svg/logo.svg" alt="Divvylore" />
+          <BrandText>
+            <BrandName>{siteContent.brand.name}</BrandName>
+            <BrandTagline>{siteContent.brand.tagline}</BrandTagline>
+          </BrandText>
+        </Brand>
+
+        <Nav>
+          {primaryDesktopNav.map((item) => (
+            <NavLink key={item.label} href={item.href}>
+              {item.label}
+            </NavLink>
+          ))}
+
+          {overflowDesktopNav.length > 0 && (
+            <OverflowWrap>
+              <OverflowButton
+                type="button"
+                onClick={() => setIsOverflowOpen((prev) => !prev)}
+                aria-label="More navigation"
+                aria-expanded={isOverflowOpen}
+              >
+                More
+              </OverflowButton>
+              <OverflowMenu isOpen={isOverflowOpen}>
+                {overflowDesktopNav.map((item) => (
+                  <NavLink
+                    key={`overflow-${item.label}`}
+                    href={item.href}
+                    onClick={() => setIsOverflowOpen(false)}
+                  >
+                    {item.label}
+                  </NavLink>
+                ))}
+              </OverflowMenu>
+            </OverflowWrap>
+          )}
+        </Nav>
+
+        <Actions>
+          <GhostButton href={loginUrl}>Login</GhostButton>
+          <PrimaryButton href={registerUrl}>Get Started</PrimaryButton>
+          <MobileMenuButton
+            type="button"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            aria-label="Toggle menu"
+          >
+            Menu
+          </MobileMenuButton>
+        </Actions>
+      </HeaderInner>
+
+      <MobilePanel isOpen={isMenuOpen}>
+        {siteContent.navigation.map((item) => (
+          <NavLink key={`mobile-${item.label}`} href={item.href}>
+            {item.label}
+          </NavLink>
+        ))}
+        <GhostButton href={loginUrl}>Login</GhostButton>
+        <PrimaryButton href={registerUrl}>Start Free</PrimaryButton>
+      </MobilePanel>
     </HeaderSection>
   );
 };
 
-export default withTranslation()(Header);
+export default Header;

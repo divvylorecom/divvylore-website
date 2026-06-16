@@ -1,0 +1,273 @@
+{
+  "brand": {
+    "name": "Divvylore",
+    "tagline": "AI support agents for customer journeys"
+  },
+  "appUrls": {
+    "base": "https://app.divvylore.com",
+    "register": "https://app.divvylore.com/register",
+    "login": "https://app.divvylore.com/login"
+  },
+  "navigation": [
+    {
+      "label": "Product",
+      "href": "#highlights"
+    },
+    {
+      "label": "How it works",
+      "href": "#how-it-works"
+    },
+    {
+      "label": "Capabilities",
+      "href": "#features"
+    },
+    {
+      "label": "Pricing",
+      "href": "#pricing"
+    }
+  ],
+  "hero": {
+    "eyebrow": "Conversational AI for customer support",
+    "title": "Build AI support agents that resolve issues and keep customers moving.",
+    "description": "Divvylore is a complete platform for designing, deploying, and improving support agents with guardrails, real system actions, and human handoff.",
+    "primaryCta": {
+      "label": "Build your agent",
+      "url": "https://app.divvylore.com/register"
+    },
+    "secondaryCta": {
+      "label": "Login",
+      "url": "https://app.divvylore.com/login"
+    },
+    "supportPills": [
+      "Website chat",
+      "Queue-ready transport",
+      "Human escalation",
+      "Tenant isolation"
+    ]
+  },
+  "highlights": {
+    "title": "The complete platform for AI support agents",
+    "subtitle": "Designed for production customer support from day one.",
+    "cards": [
+      {
+        "title": "Purpose-built for support",
+        "description": "Train agents on your support knowledge, workflows, and response standards."
+      },
+      {
+        "title": "Designed for simplicity",
+        "description": "Create, test, and deploy agents without heavy operational overhead."
+      },
+      {
+        "title": "Engineered for reliability",
+        "description": "Use queue-first delivery and worker-backed processing for stable production behavior."
+      }
+    ]
+  },
+  "howItWorks": {
+    "title": "How Divvylore support agents work",
+    "steps": [
+      {
+        "title": "Build and configure",
+        "description": "Define prompts, tools, and guardrails for your support use cases."
+      },
+      {
+        "title": "Connect your systems",
+        "description": "Link business context so agents can answer with real-time relevance."
+      },
+      {
+        "title": "Resolve customer issues",
+        "description": "Let agents handle common requests and execute approved actions."
+      },
+      {
+        "title": "Escalate complex cases",
+        "description": "Route edge cases to humans with full conversation context."
+      },
+      {
+        "title": "Improve with insights",
+        "description": "Review outcomes and optimize prompts, tools, and journey flows."
+      }
+    ]
+  },
+  "features": {
+    "title": "Build the support experience your customers expect",
+    "items": [
+      {
+        "title": "Sync with support context",
+        "description": "Agents can use relevant customer and workflow context for better resolution quality."
+      },
+      {
+        "title": "Action-driven workflows",
+        "description": "Enable controlled actions so the agent can do more than just answer questions."
+      },
+      {
+        "title": "Smart escalation",
+        "description": "Escalate by policy when confidence is low or requests require human approval."
+      },
+      {
+        "title": "Operational analytics",
+        "description": "Track outcomes and response quality to continuously improve support performance."
+      },
+      {
+        "title": "Works across channels",
+        "description": "Support website chat and extensible channels from one agent control layer."
+      },
+      {
+        "title": "API-first integration",
+        "description": "Integrate deeply with your product using APIs and flexible runtime architecture."
+      }
+    ]
+  },
+  "artifacts": {
+    "title": "See the Divvylore platform in action",
+    "subtitle": "Real product screens from analytics, agents, tools, chat, leads, and billing workflows.",
+    "items": [
+      {
+        "title": "Analytics dashboard",
+        "imageUrl": "/artifacts/analytics-dashboard.png",
+        "alt": "Analytics dashboard with response and sender metrics"
+      },
+      {
+        "title": "Usage and credits",
+        "imageUrl": "/artifacts/usage-credits.png",
+        "alt": "Usage and credits page with limits and progress bars"
+      },
+      {
+        "title": "Agent management",
+        "imageUrl": "/artifacts/agent-management.png",
+        "alt": "Agent management list and details"
+      },
+      {
+        "title": "Tool marketplace",
+        "imageUrl": "/artifacts/tool-marketplace.png",
+        "alt": "Tool marketplace modal with featured tools"
+      },
+      {
+        "title": "Live playground",
+        "imageUrl": "/artifacts/live-playground.png",
+        "alt": "Agent playground with floating live preview"
+      },
+      {
+        "title": "Chat history",
+        "imageUrl": "/artifacts/chat-history.png",
+        "alt": "Chat history interface with conversation threads"
+      },
+      {
+        "title": "Lead generation",
+        "imageUrl": "/artifacts/lead-generation.png",
+        "alt": "Lead generation contacts table"
+      },
+      {
+        "title": "Billing and plans",
+        "imageUrl": "/artifacts/billing-plans.png",
+        "alt": "Billing and subscription plans"
+      },
+      {
+        "title": "Credit center",
+        "imageUrl": "/artifacts/credit-center.png",
+        "alt": "Credit balance and transaction summary"
+      }
+    ]
+  },
+  "security": {
+    "title": "Enterprise-grade security and privacy",
+    "items": [
+      {
+        "title": "Your data stays controlled",
+        "description": "Tenant-aware design and scoped execution protect customer boundaries."
+      },
+      {
+        "title": "Encrypted by default",
+        "description": "Use secure transport and protected service boundaries across system flows."
+      },
+      {
+        "title": "Guardrails for responses",
+        "description": "Response policies reduce off-topic and unsafe outputs in customer-facing chats."
+      }
+    ]
+  },
+  "pricing": {
+    "title": "Pricing for teams growing support automation",
+    "subtitle": "Start simple and expand as support volume and complexity increase.",
+    "plans": [
+      {
+        "name": "Starter",
+        "price": "$29",
+        "period": "/month",
+        "description": "For teams launching their first AI support workflow.",
+        "features": [
+          "1 production agent",
+          "Portal access",
+          "Basic analytics",
+          "Email support"
+        ],
+        "highlighted": false,
+        "ctaLabel": "Choose Starter",
+        "planCode": "starter"
+      },
+      {
+        "name": "Growth",
+        "price": "$99",
+        "period": "/month",
+        "description": "For teams running multiple production support workflows.",
+        "features": [
+          "5 production agents",
+          "Advanced configuration",
+          "Queue-first chat flow",
+          "Priority support"
+        ],
+        "highlighted": true,
+        "ctaLabel": "Choose Growth",
+        "planCode": "growth"
+      },
+      {
+        "name": "Scale",
+        "price": "Custom",
+        "period": "",
+        "description": "For enterprises with advanced governance requirements.",
+        "features": [
+          "Custom agent limits",
+          "Tenant governance",
+          "Dedicated onboarding",
+          "Architecture support"
+        ],
+        "highlighted": false,
+        "ctaLabel": "Contact Sales",
+        "planCode": "scale"
+      }
+    ]
+  },
+  "faq": {
+    "title": "FAQ",
+    "items": [
+      {
+        "question": "Can we start with one workflow and scale later?",
+        "answer": "Yes. You can start with one production workflow and scale to additional agents and channels."
+      },
+      {
+        "question": "Where do registration and login happen?",
+        "answer": "All account actions happen in app.divvylore.com."
+      },
+      {
+        "question": "Can we keep a human in the loop?",
+        "answer": "Yes. Divvylore supports escalation and handoff patterns for complex customer issues."
+      }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2026 Divvylore. All rights reserved.",
+    "quickLinks": [
+      {
+        "label": "Get Started",
+        "url": "https://app.divvylore.com/register"
+      },
+      {
+        "label": "Login",
+        "url": "https://app.divvylore.com/login"
+      },
+      {
+        "label": "Pricing",
+        "url": "#pricing"
+      }
+    ]
+  }
+}
