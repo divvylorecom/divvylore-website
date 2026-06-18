@@ -1,192 +1,162 @@
 import styled from "styled-components";
 
-export const HeaderSection = styled.header`
+export const HeaderShell = styled.header`
   position: sticky;
   top: 0;
-  z-index: 100;
-  backdrop-filter: blur(10px);
-  background: rgba(247, 249, 255, 0.88);
-  border-bottom: 1px solid #dde6ff;
+  z-index: 120;
+  background: rgba(245, 243, 238, 0.82);
+  backdrop-filter: saturate(140%) blur(16px);
+  border-bottom: 1px solid var(--line);
 `;
 
 export const HeaderInner = styled.div`
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0.72rem 1.25rem;
+  padding: 0.7rem 1.4rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.8rem;
+  gap: 1.2rem;
+
+  @media (max-width: 700px) {
+    padding: 0.6rem 1rem;
+  }
 `;
 
 export const Brand = styled.a`
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  color: #152a59;
+  gap: 0.55rem;
+  color: var(--text-primary);
+  flex-shrink: 0;
 `;
 
 export const BrandMark = styled.img`
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
+  display: block;
 `;
 
-export const BrandText = styled.span`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const BrandName = styled.strong`
-  font-size: 0.96rem;
+export const BrandWord = styled.span`
+  font-family: 'DM Serif Display', 'Space Grotesk', serif;
+  font-weight: 400;
+  font-size: 1.45rem;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
-`;
-
-export const BrandTagline = styled.span`
-  font-size: 0.68rem;
-  color: #5a6f9d;
-  letter-spacing: 0.02em;
-
-  @media (max-width: 1180px) {
-    display: none;
-  }
+  color: #2a2a2a;
+  line-height: 1;
+  position: relative;
+  top: 1px;
 `;
 
 export const Nav = styled.nav`
-  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
+  margin-left: 0.6rem;
 
-  @media (max-width: 980px) {
+  @media (max-width: 960px) {
     display: none;
   }
 `;
 
 export const NavLink = styled.a`
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #4a5f8f;
-  padding: 0.5rem 0.72rem;
-  border-radius: 999px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  transition: color 0.15s ease, background-color 0.15s ease;
 
   &:hover {
-    color: #1c3675;
-    background-color: #edf3ff;
+    color: var(--text-primary);
+    background-color: rgba(14, 22, 45, 0.05);
   }
 `;
 
-export const OverflowWrap = styled.div`
-  position: relative;
-`;
-
-export const OverflowButton = styled.button`
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #4a5f8f;
-  padding: 0.5rem 0.72rem;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  background: transparent;
-  cursor: pointer;
-
-  &:hover {
-    color: #1c3675;
-    background-color: #edf3ff;
-  }
-`;
-
-export const OverflowMenu = styled.div<{ isOpen: boolean }>`
-  display: ${(props) => (props.isOpen ? "grid" : "none")};
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  min-width: 180px;
-  border: 1px solid #d7e4ff;
-  border-radius: 12px;
-  background: #ffffff;
-  padding: 0.45rem;
-  box-shadow: 0 18px 32px rgba(20, 45, 90, 0.14);
-  z-index: 30;
-
-  ${NavLink} {
-    text-transform: none;
-    letter-spacing: 0.02em;
-    border-radius: 8px;
-  }
+export const Spacer = styled.div`
+  flex: 1;
 `;
 
 export const Actions = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
 
-  @media (max-width: 980px) {
-    gap: 0.45rem;
+  @media (max-width: 700px) {
+    gap: 0.4rem;
   }
 `;
 
-const CtaBase = styled.a`
+export const GhostLink = styled.a`
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 38px;
-  font-size: 0.84rem;
-  font-weight: 600;
-  text-transform: none;
-  letter-spacing: 0.01em;
-  padding: 0.45rem 0.92rem;
+  padding: 0.45rem 0.9rem;
   border-radius: 999px;
-  border: 1px solid transparent;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: transparent;
 
   &:hover {
-    transform: translateY(-1px);
+    background: rgba(14, 22, 45, 0.06);
+  }
+
+  @media (max-width: 480px) {
+    display: none;
   }
 `;
 
-export const GhostButton = styled(CtaBase)`
-  border-color: #cbd9ff;
-  color: #2d4b93;
-  background: #f5f8ff;
-`;
-
-export const PrimaryButton = styled(CtaBase)`
-  color: #ffffff;
-  background: linear-gradient(145deg, #2f5be7, #2b4fd0);
-  box-shadow: 0 8px 16px rgba(39, 79, 201, 0.24);
-`;
-
-export const MobileMenuButton = styled.button`
-  display: none;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  min-height: 40px;
-  padding: 0.5rem 0.78rem;
-  color: #2d4b93;
-  background: #eef3ff;
-  border: 1px solid #cbd9ff;
+export const PrimaryCta = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0.5rem 1rem;
   border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--bg-ink);
+  transition: transform 0.15s ease, background 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    background: #14192a;
+  }
+`;
+
+export const MobileToggle = styled.button`
+  display: none;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-primary);
   cursor: pointer;
 
-  @media (max-width: 980px) {
+  @media (max-width: 960px) {
     display: inline-flex;
   }
 `;
 
-export const MobilePanel = styled.div<{ isOpen: boolean }>`
-  display: ${(props) => (props.isOpen ? "flex" : "none")};
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0 1.25rem 1rem;
-  max-width: 1180px;
-  margin: 0 auto;
+export const MobilePanel = styled.div<{ open: boolean }>`
+  display: ${(p) => (p.open ? "grid" : "none")};
+  gap: 0.3rem;
+  padding: 0.5rem 1rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-page);
 
-  @media (min-width: 981px) {
+  ${NavLink} {
+    padding: 0.7rem 0.8rem;
+    border-radius: 10px;
+    font-size: 1rem;
+  }
+
+  @media (min-width: 961px) {
     display: none;
   }
 `;

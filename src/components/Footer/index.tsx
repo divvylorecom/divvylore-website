@@ -1,19 +1,18 @@
 import siteContent from "../../content/SiteContent.json";
 import {
-  FooterSection,
+  FooterShell,
   FooterInner,
-  FooterBrandColumn,
-  FooterBrand,
+  FooterBrandBlock,
+  FooterBrandRow,
+  FooterMark,
+  FooterBrandName,
   FooterTag,
-  FooterButton,
-  FooterInlineLinks,
-  FooterSocialRow,
-  FooterSocialButton,
-  FooterBottom,
-  FooterColumns,
-  FooterGroup,
-  FooterGroupTitle,
+  FooterCols,
+  FooterCol,
+  FooterColTitle,
   FooterLink,
+  FooterBottom,
+  FooterLegalLinks,
 } from "./styles";
 
 const Footer = () => {
@@ -24,55 +23,52 @@ const Footer = () => {
   const termsUrl = `${siteContent.appUrls.base}/terms-and-conditions`;
 
   return (
-    <FooterSection>
+    <FooterShell>
       <FooterInner>
-        <FooterBrandColumn>
-          <FooterBrand>{siteContent.brand.name}</FooterBrand>
+        <FooterBrandBlock>
+          <FooterBrandRow href="/" aria-label="Divvylore home">
+            <FooterMark src="/img/svg/logo.svg" alt="" />
+            <FooterBrandName>DIVVYLORE</FooterBrandName>
+          </FooterBrandRow>
           <FooterTag>{siteContent.brand.tagline}</FooterTag>
+        </FooterBrandBlock>
 
-          <FooterInlineLinks>
-            <FooterButton href={registerUrl}>Get Started</FooterButton>
-            <FooterButton href={loginUrl}>Login</FooterButton>
-            <FooterButton href="#">Contact</FooterButton>
-          </FooterInlineLinks>
-
-          <FooterSocialRow>
-            <FooterSocialButton href="#" aria-label="LinkedIn">in</FooterSocialButton>
-            <FooterSocialButton href="#" aria-label="Instagram">ig</FooterSocialButton>
-            <FooterSocialButton href="#" aria-label="X">x</FooterSocialButton>
-            <FooterSocialButton href="#" aria-label="YouTube">yt</FooterSocialButton>
-          </FooterSocialRow>
-
-          <FooterBottom>{siteContent.footer.copyright}</FooterBottom>
-        </FooterBrandColumn>
-
-        <FooterColumns>
-          <FooterGroup>
-            <FooterGroupTitle>Product</FooterGroupTitle>
-            <FooterLink href="#highlights">Overview</FooterLink>
+        <FooterCols>
+          <FooterCol>
+            <FooterColTitle>Product</FooterColTitle>
+            <FooterLink href="#highlights">Platform</FooterLink>
             <FooterLink href="#how-it-works">How it works</FooterLink>
             <FooterLink href="#features">Capabilities</FooterLink>
-          </FooterGroup>
-
-          <FooterGroup>
-            <FooterGroupTitle>Resources</FooterGroupTitle>
             <FooterLink href="#security">Security</FooterLink>
             <FooterLink href="#pricing">Pricing</FooterLink>
-            <FooterLink href="#faq">FAQ</FooterLink>
-            <FooterLink href={registerUrl}>Register</FooterLink>
-          </FooterGroup>
+          </FooterCol>
 
-          <FooterGroup>
-            <FooterGroupTitle>Company</FooterGroupTitle>
-            <FooterLink href={siteContent.appUrls.base}>Platform</FooterLink>
-            <FooterLink href={loginUrl}>Sign in</FooterLink>
+          <FooterCol>
+            <FooterColTitle>Resources</FooterColTitle>
+            <FooterLink href="#faq">FAQ</FooterLink>
+            <FooterLink href={siteContent.appUrls.base}>Customer portal</FooterLink>
             <FooterLink href={registerUrl}>Create account</FooterLink>
+            <FooterLink href={loginUrl}>Sign in</FooterLink>
+            <FooterLink href="mailto:hello@divvylore.com">Contact</FooterLink>
+          </FooterCol>
+
+          <FooterCol>
+            <FooterColTitle>Company</FooterColTitle>
+            <FooterLink href={siteContent.appUrls.base}>About</FooterLink>
             <FooterLink href={privacyUrl}>Privacy policy</FooterLink>
             <FooterLink href={termsUrl}>Terms and conditions</FooterLink>
-          </FooterGroup>
-        </FooterColumns>
+          </FooterCol>
+        </FooterCols>
       </FooterInner>
-    </FooterSection>
+
+      <FooterBottom>
+        <span>{siteContent.footer.copyright}</span>
+        <FooterLegalLinks>
+          <FooterLink href={privacyUrl}>Privacy</FooterLink>
+          <FooterLink href={termsUrl}>Terms</FooterLink>
+        </FooterLegalLinks>
+      </FooterBottom>
+    </FooterShell>
   );
 };
 

@@ -1,100 +1,72 @@
 import { useState } from "react";
 import siteContent from "../../content/SiteContent.json";
 import {
-  HeaderSection,
+  HeaderShell,
   HeaderInner,
   Brand,
   BrandMark,
-  BrandText,
-  BrandName,
-  BrandTagline,
+  BrandWord,
   Nav,
   NavLink,
-  OverflowWrap,
-  OverflowButton,
-  OverflowMenu,
+  Spacer,
   Actions,
-  GhostButton,
-  PrimaryButton,
-  MobileMenuButton,
+  GhostLink,
+  PrimaryCta,
+  MobileToggle,
   MobilePanel,
 } from "./styles";
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isOverflowOpen, setIsOverflowOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const source = typeof window !== "undefined" ? window.location.hostname : "divvylore.com";
   const registerUrl = `${siteContent.appUrls.register}?source=${encodeURIComponent(source)}&placement=header`;
   const loginUrl = `${siteContent.appUrls.login}?source=${encodeURIComponent(source)}&placement=header`;
-  const primaryDesktopNav = siteContent.navigation.slice(0, 5);
-  const overflowDesktopNav = siteContent.navigation.slice(5);
 
   return (
-    <HeaderSection>
+    <HeaderShell>
       <HeaderInner>
         <Brand href="/" aria-label="Divvylore home">
-          <BrandMark src="/img/svg/logo.svg" alt="Divvylore" />
-          <BrandText>
-            <BrandName>{siteContent.brand.name}</BrandName>
-            <BrandTagline>{siteContent.brand.tagline}</BrandTagline>
-          </BrandText>
+          <BrandMark src="/img/svg/logo.svg" alt="" />
+          <BrandWord>DIVVYLORE</BrandWord>
         </Brand>
 
         <Nav>
-          {primaryDesktopNav.map((item) => (
+          {siteContent.navigation.map((item) => (
             <NavLink key={item.label} href={item.href}>
               {item.label}
             </NavLink>
           ))}
-
-          {overflowDesktopNav.length > 0 && (
-            <OverflowWrap>
-              <OverflowButton
-                type="button"
-                onClick={() => setIsOverflowOpen((prev) => !prev)}
-                aria-label="More navigation"
-                aria-expanded={isOverflowOpen}
-              >
-                More
-              </OverflowButton>
-              <OverflowMenu isOpen={isOverflowOpen}>
-                {overflowDesktopNav.map((item) => (
-                  <NavLink
-                    key={`overflow-${item.label}`}
-                    href={item.href}
-                    onClick={() => setIsOverflowOpen(false)}
-                  >
-                    {item.label}
-                  </NavLink>
-                ))}
-              </OverflowMenu>
-            </OverflowWrap>
-          )}
         </Nav>
 
+        <Spacer />
+
         <Actions>
-          <GhostButton href={loginUrl}>Login</GhostButton>
-          <PrimaryButton href={registerUrl}>Get Started</PrimaryButton>
-          <MobileMenuButton
+          <GhostLink href={loginUrl}>Sign in</GhostLink>
+          <PrimaryCta href={registerUrl}>Get started</PrimaryCta>
+          <MobileToggle
             type="button"
-            onClick={() => setIsMenuOpen((prev) => !prev)}
             aria-label="Toggle menu"
+            aria-expanded={open}
+            onClick={() => setOpen((prev) => !prev)}
           >
-            Menu
-          </MobileMenuButton>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+            </svg>
+          </MobileToggle>
         </Actions>
       </HeaderInner>
 
-      <MobilePanel isOpen={isMenuOpen}>
+      <MobilePanel open={open}>
         {siteContent.navigation.map((item) => (
-          <NavLink key={`mobile-${item.label}`} href={item.href}>
+          <NavLink key={`m-${item.label}`} href={item.href} onClick={() => setOpen(false)}>
             {item.label}
           </NavLink>
         ))}
-        <GhostButton href={loginUrl}>Login</GhostButton>
-        <PrimaryButton href={registerUrl}>Start Free</PrimaryButton>
+        <NavLink href={loginUrl} onClick={() => setOpen(false)}>
+          Sign in
+        </NavLink>
       </MobilePanel>
-    </HeaderSection>
+    </HeaderShell>
   );
 };
 
