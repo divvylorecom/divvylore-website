@@ -19,8 +19,9 @@ const Footer = () => {
   const source = typeof window !== "undefined" ? window.location.hostname : "divvylore.com";
   const registerUrl = `${siteContent.appUrls.register}?source=${encodeURIComponent(source)}&placement=footer`;
   const loginUrl = `${siteContent.appUrls.login}?source=${encodeURIComponent(source)}&placement=footer`;
-  const privacyUrl = `${siteContent.appUrls.base}/privacy-policy`;
-  const termsUrl = `${siteContent.appUrls.base}/terms-and-conditions`;
+  const privacyUrl = siteContent.legalUrls.privacyPolicy;
+  const termsUrl = siteContent.legalUrls.termsAndConditions;
+  const refundUrl = siteContent.legalUrls.refundPolicy;
 
   return (
     <FooterShell>
@@ -57,6 +58,7 @@ const Footer = () => {
             <FooterLink href={siteContent.appUrls.base}>About</FooterLink>
             <FooterLink href={privacyUrl}>Privacy policy</FooterLink>
             <FooterLink href={termsUrl}>Terms and conditions</FooterLink>
+            <FooterLink href={refundUrl}>Refund policy</FooterLink>
           </FooterCol>
         </FooterCols>
       </FooterInner>
@@ -66,6 +68,7 @@ const Footer = () => {
         <FooterLegalLinks>
           <FooterLink href={privacyUrl}>Privacy</FooterLink>
           <FooterLink href={termsUrl}>Terms</FooterLink>
+          <FooterLink href={refundUrl}>Refunds</FooterLink>
         </FooterLegalLinks>
       </FooterBottom>
     </FooterShell>

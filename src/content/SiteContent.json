@@ -8,6 +8,11 @@
     "register": "https://app.divvylore.com/register",
     "login": "https://app.divvylore.com/login"
   },
+  "legalUrls": {
+    "privacyPolicy": "https://blog.divvylore.com/privacy-policy",
+    "termsAndConditions": "https://blog.divvylore.com/terms-and-conditions",
+    "refundPolicy": "https://blog.divvylore.com/refund-policy"
+  },
   "navigation": [
     {
       "label": "Product",
