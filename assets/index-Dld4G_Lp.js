@@ -389,16 +389,17 @@ Error generating stack: `+s.message+`
 `,nE=R.div`
   display: grid;
   gap: 0;
-  padding: 0 0.85rem 30vh;
+  /* Keep in step with StackCard margin-bottom (was 30vh — left a dead gap). */
+  padding: 0 0.85rem 1.25rem;
   max-width: 1280px;
   margin: 0 auto;
 
   @media (max-width: 700px) {
-    padding: 0 0.55rem 24vh;
+    padding: 0 0.55rem 0.85rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    padding-bottom: 2rem;
+    padding-bottom: 1rem;
   }
 `,Sv=ca`
   background: var(--glass-bg);
