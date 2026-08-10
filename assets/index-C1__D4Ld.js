@@ -536,11 +536,14 @@ Error generating stack: `+s.message+`
 `,aE=R.h1`
   margin: 0;
   font-size: clamp(2.4rem, 5.8vw, 4rem);
-  line-height: 1.02;
+  line-height: 1.08;
   font-weight: 700;
-  letter-spacing: -0.05em;
-  max-width: 12ch;
+  /* -0.05em collapsed "rn" in "Turn" into an "m"-like shape */
+  letter-spacing: -0.02em;
+  max-width: 13ch;
   color: #ffffff;
+  font-kerning: normal;
+  font-feature-settings: "kern" 1;
 `,lE=R.span`
   display: block;
   margin-top: 0.12em;
