@@ -1,35 +1,16 @@
-<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Divvylore">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" role="img" aria-label="Divvylore logo">
   <defs>
-    <linearGradient id="dv-node-a" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#B79BE6"/>
-      <stop offset="1" stop-color="#6E4DC4"/>
-    </linearGradient>
-    <linearGradient id="dv-node-b" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#A484DB"/>
-      <stop offset="1" stop-color="#5B3CA8"/>
-    </linearGradient>
-    <linearGradient id="dv-node-c" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#C9B4F0"/>
-      <stop offset="1" stop-color="#7E5DD0"/>
-    </linearGradient>
-    <linearGradient id="dv-link" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#9579D6"/>
-      <stop offset="1" stop-color="#5B3CA8"/>
+    <linearGradient id="dvGrad" x1="16" y1="18" x2="104" y2="104" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7b1fd6"/>
+      <stop offset="0.5" stop-color="#b62caa"/>
+      <stop offset="1" stop-color="#ff4a55"/>
     </linearGradient>
   </defs>
 
-  <path d="M19 18 L32 32 L19 46" stroke="url(#dv-link)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
-  <path d="M45 18 L32 32 L45 46" stroke="url(#dv-link)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/>
+  <path d="M27 20 H71 L100 47 V93 a6 6 0 0 1 -6 6 H27 a6 6 0 0 1 -6 -6 V26 a6 6 0 0 1 6 -6 Z"
+        stroke="url(#dvGrad)" stroke-width="12" stroke-linejoin="round"/>
 
-  <circle cx="19" cy="18" r="8.5" fill="url(#dv-node-a)"/>
-  <circle cx="45" cy="18" r="8.5" fill="url(#dv-node-c)"/>
-  <circle cx="32" cy="32" r="9.5" fill="url(#dv-node-b)"/>
-  <circle cx="19" cy="46" r="8.5" fill="url(#dv-node-c)"/>
-  <circle cx="45" cy="46" r="8.5" fill="url(#dv-node-a)"/>
+  <path d="M34 84 L58 38 L72 58 L82 46 L92 84 Z" fill="url(#dvGrad)"/>
 
-  <circle cx="19" cy="18" r="2.2" fill="#FFFFFF" fill-opacity="0.85"/>
-  <circle cx="45" cy="18" r="2.2" fill="#FFFFFF" fill-opacity="0.85"/>
-  <circle cx="32" cy="32" r="2.6" fill="#FFFFFF" fill-opacity="0.9"/>
-  <circle cx="19" cy="46" r="2.2" fill="#FFFFFF" fill-opacity="0.85"/>
-  <circle cx="45" cy="46" r="2.2" fill="#FFFFFF" fill-opacity="0.85"/>
+  <path d="M34 84 L47 60 L55 70 L64 55 L72 67 L80 57 L92 84 Z" fill="#ffffff"/>
 </svg>
