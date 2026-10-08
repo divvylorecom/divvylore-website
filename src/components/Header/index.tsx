@@ -24,48 +24,50 @@ const Header = () => {
 
   return (
     <HeaderShell>
-      <HeaderInner>
-        <Brand href="/" aria-label="Divvylore home">
-          <BrandMark src="/img/svg/logo.svg" alt="" />
-          <BrandWord>DIVVYLORE</BrandWord>
-        </Brand>
+      <div style={{ position: "relative", width: "min(1120px, 100%)" }}>
+        <HeaderInner>
+          <Brand href="/" aria-label="Divvylore home">
+            <BrandMark src="/img/svg/logo.svg" alt="" />
+            <BrandWord>Divvylore</BrandWord>
+          </Brand>
 
-        <Nav>
+          <Nav>
+            {siteContent.navigation.map((item) => (
+              <NavLink key={item.label} href={item.href}>
+                {item.label}
+              </NavLink>
+            ))}
+          </Nav>
+
+          <Spacer />
+
+          <Actions>
+            <GhostLink href={loginUrl}>Sign in</GhostLink>
+            <PrimaryCta href={registerUrl}>Get Started</PrimaryCta>
+            <MobileToggle
+              type="button"
+              aria-label="Toggle menu"
+              aria-expanded={open}
+              onClick={() => setOpen((prev) => !prev)}
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+              </svg>
+            </MobileToggle>
+          </Actions>
+        </HeaderInner>
+
+        <MobilePanel open={open}>
           {siteContent.navigation.map((item) => (
-            <NavLink key={item.label} href={item.href}>
+            <NavLink key={`m-${item.label}`} href={item.href} onClick={() => setOpen(false)}>
               {item.label}
             </NavLink>
           ))}
-        </Nav>
-
-        <Spacer />
-
-        <Actions>
-          <GhostLink href={loginUrl}>Sign in</GhostLink>
-          <PrimaryCta href={registerUrl}>Get started</PrimaryCta>
-          <MobileToggle
-            type="button"
-            aria-label="Toggle menu"
-            aria-expanded={open}
-            onClick={() => setOpen((prev) => !prev)}
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-              <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-            </svg>
-          </MobileToggle>
-        </Actions>
-      </HeaderInner>
-
-      <MobilePanel open={open}>
-        {siteContent.navigation.map((item) => (
-          <NavLink key={`m-${item.label}`} href={item.href} onClick={() => setOpen(false)}>
-            {item.label}
+          <NavLink href={loginUrl} onClick={() => setOpen(false)}>
+            Sign in
           </NavLink>
-        ))}
-        <NavLink href={loginUrl} onClick={() => setOpen(false)}>
-          Sign in
-        </NavLink>
-      </MobilePanel>
+        </MobilePanel>
+      </div>
     </HeaderShell>
   );
 };
