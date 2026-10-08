@@ -29,7 +29,7 @@ const Footer = () => {
         <FooterBrandBlock>
           <FooterBrandRow href="/" aria-label="Divvylore home">
             <FooterMark src="/img/svg/logo.svg" alt="" />
-            <FooterBrandName>DIVVYLORE</FooterBrandName>
+            <FooterBrandName>Divvylore</FooterBrandName>
           </FooterBrandRow>
           <FooterTag>{siteContent.brand.tagline}</FooterTag>
         </FooterBrandBlock>
@@ -37,10 +37,9 @@ const Footer = () => {
         <FooterCols>
           <FooterCol>
             <FooterColTitle>Product</FooterColTitle>
-            <FooterLink href="#highlights">Platform</FooterLink>
+            <FooterLink href="#product">Product</FooterLink>
+            <FooterLink href="#use-cases">Use cases</FooterLink>
             <FooterLink href="#how-it-works">How it works</FooterLink>
-            <FooterLink href="#features">Capabilities</FooterLink>
-            <FooterLink href="#security">Security</FooterLink>
             <FooterLink href="#pricing">Pricing</FooterLink>
           </FooterCol>
 
@@ -55,7 +54,6 @@ const Footer = () => {
 
           <FooterCol>
             <FooterColTitle>Company</FooterColTitle>
-            <FooterLink href={siteContent.appUrls.base}>About</FooterLink>
             <FooterLink href={privacyUrl}>Privacy policy</FooterLink>
             <FooterLink href={termsUrl}>Terms and conditions</FooterLink>
             <FooterLink href={refundUrl}>Refund policy</FooterLink>

@@ -2,56 +2,63 @@ import styled from "styled-components";
 
 export const HeaderShell = styled.header`
   position: sticky;
-  top: 0;
-  z-index: 120;
-  background: rgba(245, 243, 238, 0.82);
-  backdrop-filter: saturate(140%) blur(16px);
-  border-bottom: 1px solid var(--line);
+  top: 0.85rem;
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem;
+  pointer-events: none;
 `;
 
 export const HeaderInner = styled.div`
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0.7rem 1.4rem;
+  width: min(1120px, 100%);
+  min-height: 58px;
+  padding: 0.45rem 0.55rem 0.45rem 1rem;
   display: flex;
   align-items: center;
-  gap: 1.2rem;
-
-  @media (max-width: 700px) {
-    padding: 0.6rem 1rem;
-  }
+  gap: 0.8rem;
+  pointer-events: auto;
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.04) 45%,
+    rgba(16, 20, 34, 0.55) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: saturate(160%) blur(18px);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  box-shadow:
+    0 18px 40px -24px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 `;
 
 export const Brand = styled.a`
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  color: var(--text-primary);
+  gap: 0.5rem;
+  color: #ffffff;
   flex-shrink: 0;
 `;
 
 export const BrandMark = styled.img`
-  width: 38px;
-  height: 38px;
+  width: 28px;
+  height: 28px;
   display: block;
 `;
 
 export const BrandWord = styled.span`
-  font-family: 'DM Serif Display', 'Space Grotesk', serif;
-  font-weight: 400;
-  font-size: 1.45rem;
-  letter-spacing: 0.08em;
-  color: #2a2a2a;
-  line-height: 1;
-  position: relative;
-  top: 1px;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: -0.04em;
+  color: #ffffff;
 `;
 
 export const Nav = styled.nav`
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  margin-left: 0.6rem;
+  gap: 0.05rem;
+  margin-left: 0.2rem;
 
   @media (max-width: 960px) {
     display: none;
@@ -59,16 +66,16 @@ export const Nav = styled.nav`
 `;
 
 export const NavLink = styled.a`
-  font-size: 0.92rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 650;
+  color: rgba(244, 246, 251, 0.72);
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
   transition: color 0.15s ease, background-color 0.15s ease;
 
   &:hover {
-    color: var(--text-primary);
-    background-color: rgba(14, 22, 45, 0.05);
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
   }
 `;
 
@@ -79,11 +86,7 @@ export const Spacer = styled.div`
 export const Actions = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-
-  @media (max-width: 700px) {
-    gap: 0.4rem;
-  }
+  gap: 0.35rem;
 `;
 
 export const GhostLink = styled.a`
@@ -91,15 +94,14 @@ export const GhostLink = styled.a`
   align-items: center;
   justify-content: center;
   min-height: 38px;
-  padding: 0.45rem 0.9rem;
+  padding: 0.4rem 0.85rem;
   border-radius: 999px;
   font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  background: transparent;
+  font-weight: 700;
+  color: rgba(244, 246, 251, 0.88);
 
   &:hover {
-    background: rgba(14, 22, 45, 0.06);
+    background: rgba(255, 255, 255, 0.08);
   }
 
   @media (max-width: 480px) {
@@ -112,17 +114,20 @@ export const PrimaryCta = styled.a`
   align-items: center;
   justify-content: center;
   min-height: 38px;
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 1rem;
   border-radius: 999px;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 800;
   color: #ffffff;
-  background: var(--bg-ink);
-  transition: transform 0.15s ease, background 0.15s ease;
+  background: var(--cta-gradient);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  transition: transform 0.16s ease, filter 0.16s ease, box-shadow 0.16s ease;
+  box-shadow: var(--cta-glow);
 
   &:hover {
     transform: translateY(-1px);
-    background: #14192a;
+    filter: brightness(1.05);
+    box-shadow: var(--cta-glow-hover);
   }
 `;
 
@@ -132,10 +137,10 @@ export const MobileToggle = styled.button`
   height: 38px;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  background: transparent;
-  color: var(--text-primary);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
   cursor: pointer;
 
   @media (max-width: 960px) {
@@ -145,14 +150,23 @@ export const MobileToggle = styled.button`
 
 export const MobilePanel = styled.div<{ open: boolean }>`
   display: ${(p) => (p.open ? "grid" : "none")};
-  gap: 0.3rem;
-  padding: 0.5rem 1rem 1rem;
-  border-bottom: 1px solid var(--line);
-  background: var(--bg-page);
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  left: 1rem;
+  right: 1rem;
+  gap: 0.25rem;
+  padding: 0.7rem;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(18, 22, 36, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  pointer-events: auto;
+  box-shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.7);
 
   ${NavLink} {
-    padding: 0.7rem 0.8rem;
-    border-radius: 10px;
+    padding: 0.75rem 0.9rem;
+    border-radius: 12px;
     font-size: 1rem;
   }
 

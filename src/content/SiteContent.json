@@ -1,7 +1,7 @@
 {
   "brand": {
     "name": "Divvylore",
-    "tagline": "AI support agents for customer journeys"
+    "tagline": "Turn your website into sales and support on autopilot with AI agents"
   },
   "appUrls": {
     "base": "https://app.divvylore.com",
@@ -14,197 +14,212 @@
     "refundPolicy": "https://blog.divvylore.com/refund-policy"
   },
   "navigation": [
-    {
-      "label": "Product",
-      "href": "#highlights"
-    },
-    {
-      "label": "How it works",
-      "href": "#how-it-works"
-    },
-    {
-      "label": "Capabilities",
-      "href": "#features"
-    },
-    {
-      "label": "Pricing",
-      "href": "#pricing"
-    }
+    { "label": "Product", "href": "#product" },
+    { "label": "Use cases", "href": "#use-cases" },
+    { "label": "How it works", "href": "#how-it-works" },
+    { "label": "Pricing", "href": "#pricing" }
   ],
   "hero": {
-    "eyebrow": "Conversational AI for customer support",
-    "title": "Build AI support agents that resolve issues and keep customers moving.",
-    "description": "Divvylore is a complete platform for designing, deploying, and improving support agents with guardrails, real system actions, and human handoff.",
-    "primaryCta": {
-      "label": "Build your agent",
-      "url": "https://app.divvylore.com/register"
-    },
-    "secondaryCta": {
-      "label": "Login",
-      "url": "https://app.divvylore.com/login"
-    },
-    "supportPills": [
-      "Website chat",
-      "Queue-ready transport",
-      "Human escalation",
-      "Tenant isolation"
+    "titleLine1": "Turn your website into",
+    "titleLine2": "sales and support on autopilot",
+    "titleAccent": "with AI agents",
+    "description": "Build visually in the portal, deploy agents on your site, and keep humans in the loop. Every conversation — sales or support — visible, controllable, improvable.",
+    "primaryCta": { "label": "Get started for free", "url": "https://app.divvylore.com/register" },
+    "secondaryCta": { "label": "See pricing", "url": "#pricing" }
+  },
+  "audience": {
+    "intro": "The platform for teams who want their website working overnight including",
+    "roles": [
+      {
+        "id": "sales",
+        "label": "Sales",
+        "action": "can",
+        "outcome": "Capture and qualify leads from every visit"
+      },
+      {
+        "id": "support",
+        "label": "Support",
+        "action": "can",
+        "outcome": "Resolve common issues without waiting on a queue"
+      },
+      {
+        "id": "marketing",
+        "label": "Marketing",
+        "action": "can",
+        "outcome": "Publish content that ranks and trains the agent"
+      },
+      {
+        "id": "ops",
+        "label": "Founders",
+        "action": "can",
+        "outcome": "Launch a site and an agent in the same afternoon"
+      },
+      {
+        "id": "you",
+        "label": "You",
+        "action": "can",
+        "outcome": "Put sales and support on autopilot today"
+      }
     ]
   },
-  "highlights": {
-    "title": "The complete platform for AI support agents",
-    "subtitle": "Designed for production customer support from day one.",
-    "cards": [
+  "proof": [
+    {
+      "title": "Agents + websites + content.",
+      "body": "One platform for the full visitor journey — not a bolted-on chatbot."
+    },
+    {
+      "title": "Sales and support together.",
+      "body": "Qualify deals and resolve issues from the same agent control plane."
+    },
+    {
+      "title": "Humans stay in control.",
+      "body": "Guardrails, handoff, and full conversation context when it matters."
+    }
+  ],
+  "integrations": {
+    "titleLine1": "Plug AI into your website &",
+    "titleLine2": "the knowledge that powers it",
+    "subtitle": "Deploy agents on your domain. Publish pages. Feed content. Connect the tools your team already uses.",
+    "cta": "Explore the product",
+    "items": [
+      "Website chat",
+      "Lead capture",
+      "Support handoff",
+      "Content & SEO",
+      "Analytics",
+      "Billing",
+      "Knowledge sync",
+      "Custom tools"
+    ]
+  },
+  "productBlocks": [
+    {
+      "id": "agents",
+      "eyebrow": "AI agents",
+      "titleLine1": "Build AI agents",
+      "titleLine2": "you can actually follow",
+      "body": "Configure prompts, tools, and guardrails. Inspect every reply. Keep humans in the loop when confidence drops or stakes rise.",
+      "points": [
+        "Sales and support from one agent",
+        "Controlled actions — not just answers",
+        "Escalation with full chat history"
+      ]
+    },
+    {
+      "id": "website",
+      "eyebrow": "Websites",
+      "titleLine1": "Ship the site",
+      "titleLine2": "where visitors already arrive",
+      "body": "Publish a polished website, then embed your agent where intent is highest — pricing, contact, product pages.",
+      "points": [
+        "Launch or connect your domain",
+        "Brand-consistent pages",
+        "Agent ready on day one"
+      ]
+    },
+    {
+      "id": "content",
+      "eyebrow": "Content",
+      "titleLine1": "Grow with content",
+      "titleLine2": "that fuels SEO and agents",
+      "body": "Turn topics into published articles that strengthen discovery and become the knowledge your agent answers from.",
+      "points": [
+        "Articles that rank",
+        "Same knowledge as the agent",
+        "Improve from real conversations"
+      ]
+    }
+  ],
+  "control": {
+    "titleLine1": "See every prompt.",
+    "titleLine2": "Steer every outcome.",
+    "subtitle": "Other tools lock you into opaque chat. With Divvylore, you see prompts, tools, outcomes, and handoffs — then tighten the loop.",
+    "points": [
       {
-        "title": "Purpose-built for support",
-        "description": "Train agents on your support knowledge, workflows, and response standards."
+        "title": "Configure without guessing",
+        "description": "Prompts, tools, and brand voice side by side with live preview."
       },
       {
-        "title": "Designed for simplicity",
-        "description": "Create, test, and deploy agents without heavy operational overhead."
+        "title": "Test with real scenarios",
+        "description": "Try sales and support paths before visitors hit production."
       },
       {
-        "title": "Engineered for reliability",
-        "description": "Use queue-first delivery and worker-backed processing for stable production behavior."
+        "title": "Improve from outcomes",
+        "description": "Review chats, leads, and escalations — then ship the next version."
       }
     ]
   },
   "howItWorks": {
-    "title": "How Divvylore support agents work",
+    "titleLine1": "Move fast.",
+    "titleLine2": "Break nothing.",
+    "subtitle": "Short feedback loops from first deploy to ongoing improvement.",
     "steps": [
       {
-        "title": "Build and configure",
-        "description": "Define prompts, tools, and guardrails for your support use cases."
+        "title": "Choose your starting point",
+        "description": "Begin with an agent, a website, or content. Add the rest anytime — same knowledge layer."
       },
       {
-        "title": "Connect your systems",
-        "description": "Link business context so agents can answer with real-time relevance."
+        "title": "Deploy on your site",
+        "description": "Go live with guardrails so the agent can sell and support in your brand voice."
       },
       {
-        "title": "Resolve customer issues",
-        "description": "Let agents handle common requests and execute approved actions."
+        "title": "Feed it real knowledge",
+        "description": "Publish content and connect context so answers stay accurate as you grow."
       },
       {
-        "title": "Escalate complex cases",
-        "description": "Route edge cases to humans with full conversation context."
-      },
-      {
-        "title": "Improve with insights",
-        "description": "Review outcomes and optimize prompts, tools, and journey flows."
+        "title": "Tighten from production",
+        "description": "Replay conversations, fix weak spots, and keep autopilot sharp."
       }
     ]
   },
-  "features": {
-    "title": "Build the support experience your customers expect",
-    "items": [
+  "stories": [
+    {
+      "headline": "How a product team put support on autopilot",
+      "metric": "and cut repeat contacts on common issues",
+      "quote": "Divvylore let us launch a production agent quickly, keep humans in the loop, and stop babysitting every chat.",
+      "role": "Customer success lead"
+    },
+    {
+      "headline": "How a founder turned site traffic into pipeline",
+      "metric": "without hiring a full-time SDR",
+      "quote": "Visitors ask pricing questions at midnight. The agent qualifies them and books the demo — we wake up to meetings.",
+      "role": "Founder, B2B SaaS"
+    }
+  ],
+  "enterprise": {
+    "eyebrow": "Built for customer-facing work",
+    "titleLine1": "Reliable. Controllable.",
+    "titleLine2": "Ready to ship.",
+    "subtitle": "Deploy agents with the governance teams expect — isolation, guardrails, and clear handoff paths.",
+    "cards": [
       {
-        "title": "Sync with support context",
-        "description": "Agents can use relevant customer and workflow context for better resolution quality."
+        "title": "Security and control",
+        "description": "Tenant isolation, scoped execution, and protected service boundaries."
       },
       {
-        "title": "Action-driven workflows",
-        "description": "Enable controlled actions so the agent can do more than just answer questions."
+        "title": "Observability",
+        "description": "Chat history, lead outcomes, and usage so you know what the agent is doing."
       },
       {
-        "title": "Smart escalation",
-        "description": "Escalate by policy when confidence is low or requests require human approval."
+        "title": "Human-in-the-loop",
+        "description": "Escalate by policy with full context — never a black box dead end."
       },
       {
-        "title": "Operational analytics",
-        "description": "Track outcomes and response quality to continuously improve support performance."
-      },
-      {
-        "title": "Works across channels",
-        "description": "Support website chat and extensible channels from one agent control layer."
-      },
-      {
-        "title": "API-first integration",
-        "description": "Integrate deeply with your product using APIs and flexible runtime architecture."
-      }
-    ]
-  },
-  "artifacts": {
-    "title": "See the Divvylore platform in action",
-    "subtitle": "Real product screens from analytics, agents, tools, chat, leads, and billing workflows.",
-    "items": [
-      {
-        "title": "Analytics dashboard",
-        "imageUrl": "/artifacts/analytics-dashboard.png",
-        "alt": "Analytics dashboard with response and sender metrics"
-      },
-      {
-        "title": "Usage and credits",
-        "imageUrl": "/artifacts/usage-credits.png",
-        "alt": "Usage and credits page with limits and progress bars"
-      },
-      {
-        "title": "Agent management",
-        "imageUrl": "/artifacts/agent-management.png",
-        "alt": "Agent management list and details"
-      },
-      {
-        "title": "Tool marketplace",
-        "imageUrl": "/artifacts/tool-marketplace.png",
-        "alt": "Tool marketplace modal with featured tools"
-      },
-      {
-        "title": "Live playground",
-        "imageUrl": "/artifacts/live-playground.png",
-        "alt": "Agent playground with floating live preview"
-      },
-      {
-        "title": "Chat history",
-        "imageUrl": "/artifacts/chat-history.png",
-        "alt": "Chat history interface with conversation threads"
-      },
-      {
-        "title": "Lead generation",
-        "imageUrl": "/artifacts/lead-generation.png",
-        "alt": "Lead generation contacts table"
-      },
-      {
-        "title": "Billing and plans",
-        "imageUrl": "/artifacts/billing-plans.png",
-        "alt": "Billing and subscription plans"
-      },
-      {
-        "title": "Credit center",
-        "imageUrl": "/artifacts/credit-center.png",
-        "alt": "Credit balance and transaction summary"
-      }
-    ]
-  },
-  "security": {
-    "title": "Enterprise-grade security and privacy",
-    "items": [
-      {
-        "title": "Your data stays controlled",
-        "description": "Tenant-aware design and scoped execution protect customer boundaries."
-      },
-      {
-        "title": "Encrypted by default",
-        "description": "Use secure transport and protected service boundaries across system flows."
-      },
-      {
-        "title": "Guardrails for responses",
-        "description": "Response policies reduce off-topic and unsafe outputs in customer-facing chats."
+        "title": "AI guardrails",
+        "description": "Keep responses on-brand and reduce off-topic or unsafe outputs."
       }
     ]
   },
   "pricing": {
-    "title": "Pricing for teams growing support automation",
-    "subtitle": "Start simple and expand as support volume and complexity increase.",
+    "title": "Simple, transparent pricing",
+    "subtitle": "Start free. Pick the capacity you need — credits and limits are clear up front.",
     "plans": [
       {
         "name": "Starter",
         "price": "$29",
         "period": "/month",
-        "description": "For teams launching their first AI support workflow.",
-        "features": [
-          "1 production agent",
-          "Portal access",
-          "Basic analytics",
-          "Email support"
-        ],
+        "description": "For teams launching their first AI agent on a site.",
+        "features": ["1 production agent", "Portal access", "Basic analytics", "Email support"],
         "highlighted": false,
         "ctaLabel": "Choose Starter",
         "planCode": "starter"
@@ -213,7 +228,7 @@
         "name": "Growth",
         "price": "$99",
         "period": "/month",
-        "description": "For teams running multiple production support workflows.",
+        "description": "For teams running sales and support agents in production.",
         "features": [
           "5 production agents",
           "Advanced configuration",
@@ -228,7 +243,7 @@
         "name": "Scale",
         "price": "Custom",
         "period": "",
-        "description": "For enterprises with advanced governance requirements.",
+        "description": "For organizations that need governance and dedicated onboarding.",
         "features": [
           "Custom agent limits",
           "Tenant governance",
@@ -242,11 +257,15 @@
     ]
   },
   "faq": {
-    "title": "FAQ",
+    "title": "Frequently asked questions",
     "items": [
       {
-        "question": "Can we start with one workflow and scale later?",
-        "answer": "Yes. You can start with one production workflow and scale to additional agents and channels."
+        "question": "Do I need a website first, or can I start with an agent?",
+        "answer": "Either path works. Start with an agent on an existing site, launch a new site then add the agent, or begin with content that feeds both."
+      },
+      {
+        "question": "Is this only for support chat?",
+        "answer": "No. Divvylore covers sales and support — lead capture, resolution, website publishing, and content that keeps the agent informed."
       },
       {
         "question": "Where do registration and login happen?",
@@ -254,25 +273,17 @@
       },
       {
         "question": "Can we keep a human in the loop?",
-        "answer": "Yes. Divvylore supports escalation and handoff patterns for complex customer issues."
+        "answer": "Yes. Escalate complex or high-stakes conversations to people with full context."
       }
     ]
   },
+  "closing": {
+    "titleLine1": "Simple enough to launch.",
+    "titleLine2": "Powerful enough to run on autopilot.",
+    "subtitle": "Join the teams putting sales and support on their website — with AI agents they can see and control.",
+    "cta": "Start building"
+  },
   "footer": {
-    "copyright": "© 2026 Divvylore. All rights reserved.",
-    "quickLinks": [
-      {
-        "label": "Get Started",
-        "url": "https://app.divvylore.com/register"
-      },
-      {
-        "label": "Login",
-        "url": "https://app.divvylore.com/login"
-      },
-      {
-        "label": "Pricing",
-        "url": "#pricing"
-      }
-    ]
+    "copyright": "© 2026 Divvylore. All rights reserved."
   }
 }

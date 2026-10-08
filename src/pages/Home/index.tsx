@@ -1,71 +1,70 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  ArrowRight,
-  Bot,
-  CheckCircle2,
-  Plus,
-  ShieldCheck,
-  Sparkles,
-  Star,
-  Workflow,
-  Zap,
-} from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ArrowRight, CheckCircle2, Plus } from "lucide-react";
 import siteContent from "../../content/SiteContent.json";
 import {
   Page,
   Container,
   Hero,
-  HeroEyebrowRow,
-  HeroEyebrowPill,
+  CardStack,
+  StackCard,
+  BelowStack,
+  FlatSection,
+  HeroGrid,
+  HeroCopy,
   HeroTitle,
   HeroTitleAccent,
   HeroLead,
   HeroActions,
   BtnPrimary,
   BtnSecondary,
-  HeroVisualWrap,
-  HeroVisualInner,
-  HeroChatPanel,
-  HeroChatToolbar,
-  HeroChatAvatar,
-  HeroChatIdentity,
-  HeroChatName,
-  HeroChatStatus,
-  HeroChatBubble,
-  HeroChatTyping,
-  HeroSidePanel,
-  HeroSideHeading,
-  HeroSideTitle,
-  HeroSideTag,
-  HeroStat,
-  HeroStatValue,
-  HeroStatLabel,
-  TrustStrip,
-  TrustLabel,
-  MarqueeWindow,
-  MarqueeTrack,
-  MarqueeItem,
-  Section,
-  SectionEyebrow,
-  SectionTitle,
+  HeroVisual,
+  CanvasNode,
+  CanvasLine,
+  ChatPreview,
+  ChatHead,
+  ChatDot,
+  ChatBody,
+  Bubble,
+  AudienceIntro,
+  RoleTabs,
+  RoleTab,
+  RoleOutcome,
+  RoleLabel,
+  RoleAction,
+  RoleResult,
+  ProofGrid,
+  ProofCard,
+  ProofTitle,
+  ProofBody,
+  Eyebrow,
+  DisplayTitle,
+  DisplayAccent,
   SectionLead,
-  CardsRow,
-  TwoCol,
-  SoftCard,
-  CardIcon,
-  CardTitle,
-  CardText,
-  SplitSection,
-  StatsBand,
-  StatsGrid,
-  StatTile,
-  StatTileValue,
-  StatTileLabel,
-  QuoteBand,
-  QuoteCard,
-  QuoteText,
-  QuoteAttribution,
-  PricingBand,
+  ChipRow,
+  Chip,
+  BlockGrid,
+  PointList,
+  PointItem,
+  MockPanel,
+  MockRow,
+  ControlGrid,
+  ControlCard,
+  ControlTitle,
+  ControlText,
+  StepsGrid,
+  StepCard,
+  StepIndex,
+  StepTitle,
+  StepText,
+  StoriesGrid,
+  StoryCard,
+  StoryHeadline,
+  StoryMetric,
+  StoryQuote,
+  StoryRole,
+  EnterpriseGrid,
+  EnterpriseCard,
   BillingToggle,
   BillingToggleBtn,
   PlanGrid,
@@ -80,23 +79,16 @@ import {
   PlanCta,
   PlanFeatureList,
   PlanFeatureItem,
-  Timeline,
-  TimelineItem,
-  TimelineBadge,
-  TimelineContent,
-  TimelineTitle,
-  TimelineText,
+  FaqBlock,
   FaqList,
   FaqRow,
   FaqSummary,
   FaqBody,
-  ClosingCta,
-  ClosingCard,
+  ClosingInner,
   ClosingTitle,
+  ClosingAccent,
   ClosingLead,
   ClosingActions,
-  ClosingPrimaryCta,
-  ClosingGhostCta,
 } from "./styles";
 
 type BillingCycle = "monthly" | "yearly";
@@ -105,7 +97,6 @@ type PlanFeatureResponse = {
   name: string;
   description?: string;
   isIncluded: boolean;
-  isHighlighted?: boolean;
   displayOrder?: number;
 };
 
@@ -121,7 +112,6 @@ type PricingPlanResponse = {
   yearlyBonusCredits?: number;
   features?: PlanFeatureResponse[];
   buttonText?: string;
-  badgeText?: string;
   isPopular?: boolean;
   isActive?: boolean;
   isVisible?: boolean | null;
@@ -129,10 +119,18 @@ type PricingPlanResponse = {
   isCustomPricing?: boolean;
 };
 
+type AudienceRole = {
+  id: string;
+  label: string;
+  action: string;
+  outcome: string;
+};
+
 const APP_URL = "https://app.divvylore.com";
 const PRICING_API_BASE = (import.meta.env.VITE_PORTAL_API_BASE || APP_URL).replace(/\/$/, "");
 const REGISTER_PATH = "/register";
 const LOGIN_PATH = "/login";
+const easeOut = [0.22, 1, 0.36, 1] as const;
 
 const formatUsd = (amount: number) =>
   new Intl.NumberFormat("en-US", {
@@ -145,30 +143,6 @@ const toNumber = (value: unknown): number => {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : 0;
 };
-
-const trustLogoLabels = [
-  "ENTERPRISE",
-  "SUPPORT TEAMS",
-  "FINTECH",
-  "SAAS",
-  "HEALTHCARE",
-  "MARKETPLACES",
-  "RETAIL",
-  "EDUCATION",
-];
-
-const heroStats = [
-  { value: "24/7", label: "Always-on coverage" },
-  { value: "<2m", label: "Median first response" },
-  { value: "99.9%", label: "Platform reliability target" },
-];
-
-const closingStats = [
-  { value: "90%", label: "Faster resolutions on common tickets" },
-  { value: "60%", label: "Reduction in repeat contacts" },
-  { value: "10x", label: "Throughput vs. linear staffing" },
-  { value: "Days", label: "From kickoff to first deployment" },
-];
 
 const buildFallbackPlans = (raw: any): PricingPlanResponse[] => {
   const items = Array.isArray(raw?.pricing?.plans) ? raw.pricing.plans : [];
@@ -202,33 +176,37 @@ const buildFallbackPlans = (raw: any): PricingPlanResponse[] => {
 
 const Home = () => {
   const content = siteContent as any;
-  const fallbackPlans = useMemo(() => buildFallbackPlans(content), [content]);
+  const reduceMotion = useReducedMotion();
+  const roles = (content.audience?.roles || []) as AudienceRole[];
+  const [activeRole, setActiveRole] = useState(roles[0]?.id || "sales");
   const [cycle, setCycle] = useState<BillingCycle>("monthly");
+  const fallbackPlans = useMemo(() => buildFallbackPlans(content), [content]);
   const [plans, setPlans] = useState<PricingPlanResponse[]>(fallbackPlans);
-  const [isPlansLoading, setIsPlansLoading] = useState(true);
+  const productBlocks = content.productBlocks || [];
+
+  useEffect(() => {
+    if (!roles.length || reduceMotion) return;
+    const timer = window.setInterval(() => {
+      setActiveRole((current) => {
+        const idx = roles.findIndex((role) => role.id === current);
+        return roles[(idx + 1) % roles.length]?.id || roles[0].id;
+      });
+    }, 3200);
+    return () => window.clearInterval(timer);
+  }, [roles, reduceMotion]);
 
   useEffect(() => {
     const controller = new AbortController();
-
     const loadPlans = async () => {
-      setIsPlansLoading(true);
-
       try {
         const response = await fetch(`${PRICING_API_BASE}/account/tenant/plans`, {
           method: "GET",
           headers: { Accept: "application/json" },
           signal: controller.signal,
         });
-
-        if (!response.ok) {
-          throw new Error(`Pricing API returned ${response.status}`);
-        }
-
+        if (!response.ok) throw new Error(`Pricing API returned ${response.status}`);
         const data = (await response.json()) as PricingPlanResponse[];
-        if (!Array.isArray(data)) {
-          throw new Error("Pricing API response is not a plan list");
-        }
-
+        if (!Array.isArray(data)) throw new Error("Pricing API response is not a plan list");
         const normalized = data
           .map((plan) => ({
             ...plan,
@@ -241,398 +219,470 @@ const Home = () => {
             features: Array.isArray(plan.features) ? plan.features : [],
           }))
           .sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
-
-        if (normalized.length > 0) {
-          setPlans(normalized);
-        }
+        if (normalized.length > 0) setPlans(normalized);
       } catch (error) {
-        if ((error as Error).name === "AbortError") {
-          return;
-        }
-      } finally {
-        setIsPlansLoading(false);
+        if ((error as Error).name === "AbortError") return;
       }
     };
-
     loadPlans();
-
     return () => controller.abort();
   }, []);
 
   const activePlans = useMemo(() => plans.filter((plan) => plan.name), [plans]);
   const cycleLabel = cycle === "monthly" ? "/month" : "/year";
   const source = typeof window !== "undefined" ? window.location.hostname : "divvylore.com";
+  const selectedRole = roles.find((role) => role.id === activeRole) || roles[0];
 
   const buildAuthUrl = (path: string, params?: Record<string, string>) => {
     const query = new URLSearchParams({ source, ...(params || {}) }).toString();
     return `${APP_URL}${path}?${query}`;
   };
 
-  const marqueeItems = [...trustLogoLabels, ...trustLogoLabels];
+  let cardIndex = 0;
+  const nextIndex = () => cardIndex++;
 
   return (
     <Page>
-      <Hero>
+      <Hero id="hero">
         <Container>
-          <HeroEyebrowRow>
-            <HeroEyebrowPill>New</HeroEyebrowPill>
-            Conversational AI for customer support
-          </HeroEyebrowRow>
+          <HeroGrid>
+            <HeroCopy>
+              <motion.div
+                initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, ease: easeOut }}
+              >
+                <HeroTitle>
+                  {content.hero?.titleLine1}
+                  <br />
+                  {content.hero?.titleLine2}
+                  <HeroTitleAccent>{content.hero?.titleAccent}</HeroTitleAccent>
+                </HeroTitle>
+              </motion.div>
+              <HeroLead>{content.hero?.description}</HeroLead>
+              <HeroActions>
+                <BtnPrimary
+                  href={buildAuthUrl(REGISTER_PATH, { placement: "hero" })}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {content.hero?.primaryCta?.label}
+                  <ArrowRight size={16} />
+                </BtnPrimary>
+                <BtnSecondary href={content.hero?.secondaryCta?.url || "#pricing"}>
+                  {content.hero?.secondaryCta?.label}
+                </BtnSecondary>
+              </HeroActions>
+            </HeroCopy>
 
-          <HeroTitle>
-            Support agents that resolve issues and{" "}
-            <HeroTitleAccent>keep customers moving.</HeroTitleAccent>
-          </HeroTitle>
-
-          <HeroLead>{content.hero?.description}</HeroLead>
-
-          <HeroActions>
-            <BtnPrimary
-              href={buildAuthUrl(REGISTER_PATH, { placement: "hero" })}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Get started
-              <ArrowRight size={16} />
-            </BtnPrimary>
-            <BtnSecondary href="#pricing">View pricing</BtnSecondary>
-          </HeroActions>
-
-          <HeroVisualWrap>
-            <HeroVisualInner>
-              <HeroChatPanel>
-                <HeroChatToolbar>
-                  <HeroChatAvatar>D</HeroChatAvatar>
-                  <HeroChatIdentity>
-                    <HeroChatName>Divvylore Agent</HeroChatName>
-                    <HeroChatStatus>Online · responds in &lt; 2s</HeroChatStatus>
-                  </HeroChatIdentity>
-                </HeroChatToolbar>
-                <HeroChatBubble side="in">
-                  Hi, I can&rsquo;t access my dashboard after the billing update.
-                </HeroChatBubble>
-                <HeroChatBubble side="out">
-                  Got it. I&rsquo;ve verified your account and re-issued access. You should be back
-                  in under a minute.
-                </HeroChatBubble>
-                <HeroChatBubble side="in">Perfect &mdash; works now. Thanks!</HeroChatBubble>
-                <HeroChatTyping aria-hidden>
-                  <span /> <span /> <span />
-                </HeroChatTyping>
-              </HeroChatPanel>
-
-              <HeroSidePanel>
-                <HeroSideHeading>
-                  <HeroSideTitle>Live metrics</HeroSideTitle>
-                  <HeroSideTag>Today</HeroSideTag>
-                </HeroSideHeading>
-                {heroStats.map((stat) => (
-                  <HeroStat key={stat.label}>
-                    <HeroStatValue>{stat.value}</HeroStatValue>
-                    <HeroStatLabel>{stat.label}</HeroStatLabel>
-                  </HeroStat>
-                ))}
-              </HeroSidePanel>
-            </HeroVisualInner>
-          </HeroVisualWrap>
-        </Container>
-
-        <Container>
-          <TrustStrip>
-            <TrustLabel>Built for customer-facing teams across</TrustLabel>
-            <MarqueeWindow>
-              <MarqueeTrack>
-                {marqueeItems.map((label, idx) => (
-                  <MarqueeItem key={`${label}-${idx}`}>{label}</MarqueeItem>
-                ))}
-              </MarqueeTrack>
-            </MarqueeWindow>
-          </TrustStrip>
+            <HeroVisual aria-hidden>
+              <CanvasLine />
+              <CanvasNode $x={22} $y={28}>
+                Website visit
+                <span>yourbrand.com</span>
+              </CanvasNode>
+              <CanvasNode $x={50} $y={48} $accent>
+                AI Agent
+                <span>sales + support</span>
+              </CanvasNode>
+              <CanvasNode $x={78} $y={30}>
+                Lead captured
+                <span>CRM-ready</span>
+              </CanvasNode>
+              <CanvasNode $x={76} $y={68}>
+                Issue resolved
+                <span>or handed off</span>
+              </CanvasNode>
+              <ChatPreview>
+                <ChatHead>
+                  <ChatDot />
+                  Divvylore Agent · Online
+                </ChatHead>
+                <ChatBody>
+                  <Bubble>Do you offer onboarding help?</Bubble>
+                  <Bubble $out>Yes — I can book a demo or fix billing now.</Bubble>
+                  <Bubble>Book Thursday.</Bubble>
+                </ChatBody>
+              </ChatPreview>
+            </HeroVisual>
+          </HeroGrid>
         </Container>
       </Hero>
 
-      <Section id="highlights">
-        <Container>
-          <SectionEyebrow>
-            <Sparkles size={14} /> Platform
-          </SectionEyebrow>
-          <SectionTitle>{content.highlights?.title}</SectionTitle>
-          <SectionLead>{content.highlights?.subtitle}</SectionLead>
-          <CardsRow>
-            {(content.highlights?.cards || []).map(
-              (item: { title: string; description: string }) => (
-                <SoftCard key={item.title}>
-                  <CardIcon>
-                    <Star size={18} />
-                  </CardIcon>
-                  <CardTitle>{item.title}</CardTitle>
-                  <CardText>{item.description}</CardText>
-                </SoftCard>
-              ),
-            )}
-          </CardsRow>
-        </Container>
-      </Section>
-
-      <SplitSection id="how-it-works">
-        <Container>
-          <SectionEyebrow>
-            <Workflow size={14} /> How it works
-          </SectionEyebrow>
-          <SectionTitle>{content.howItWorks?.title}</SectionTitle>
-          <SectionLead>
-            Configure your workflows, connect business context, and let agents resolve common
-            requests with smart escalation when needed.
-          </SectionLead>
-          <Timeline>
-            {(content.howItWorks?.steps || []).map(
-              (step: { title: string; description: string }, idx: number) => (
-                <TimelineItem key={step.title}>
-                  <TimelineBadge>{String(idx + 1).padStart(2, "0")}</TimelineBadge>
-                  <TimelineContent>
-                    <TimelineTitle>{step.title}</TimelineTitle>
-                    <TimelineText>{step.description}</TimelineText>
-                  </TimelineContent>
-                </TimelineItem>
-              ),
-            )}
-          </Timeline>
-        </Container>
-      </SplitSection>
-
-      <Section id="features">
-        <Container>
-          <SectionEyebrow>
-            <Bot size={14} /> Capabilities
-          </SectionEyebrow>
-          <SectionTitle>{content.features?.title}</SectionTitle>
-          <SectionLead>
-            Everything you need to launch and scale production AI support, from configuration to
-            analytics and escalation.
-          </SectionLead>
-          <TwoCol>
-            {(content.features?.items || []).map(
-              (feature: { title: string; description: string }) => (
-                <SoftCard key={feature.title}>
-                  <CardIcon>
-                    <Zap size={18} />
-                  </CardIcon>
-                  <CardTitle>{feature.title}</CardTitle>
-                  <CardText>{feature.description}</CardText>
-                </SoftCard>
-              ),
-            )}
-          </TwoCol>
-        </Container>
-      </Section>
-
-      <Section id="security">
-        <Container>
-          <SectionEyebrow>
-            <ShieldCheck size={14} /> Security
-          </SectionEyebrow>
-          <SectionTitle>{content.security?.title}</SectionTitle>
-          <SectionLead>
-            Built with tenant isolation, secure transport, and response guardrails so customer-facing
-            agents stay safe and predictable.
-          </SectionLead>
-          <CardsRow>
-            {(content.security?.items || []).map(
-              (item: { title: string; description: string }) => (
-                <SoftCard key={item.title}>
-                  <CardIcon>
-                    <ShieldCheck size={18} />
-                  </CardIcon>
-                  <CardTitle>{item.title}</CardTitle>
-                  <CardText>{item.description}</CardText>
-                </SoftCard>
-              ),
-            )}
-          </CardsRow>
-        </Container>
-      </Section>
-
-      <StatsBand id="stats">
-        <Container>
-          <SectionEyebrow>
-            <Sparkles size={14} /> Outcomes
-          </SectionEyebrow>
-          <SectionTitle>Results customers see in production</SectionTitle>
-          <SectionLead>
-            Modern AI support that ships in days, not quarters, and earns its place in your team.
-          </SectionLead>
-          <StatsGrid style={{ marginTop: "2.4rem" }}>
-            {closingStats.map((stat) => (
-              <StatTile key={stat.label}>
-                <StatTileValue>{stat.value}</StatTileValue>
-                <StatTileLabel>{stat.label}</StatTileLabel>
-              </StatTile>
-            ))}
-          </StatsGrid>
-        </Container>
-      </StatsBand>
-
-      <QuoteBand id="story">
-        <Container>
-          <QuoteCard>
-            <QuoteText>
-              &ldquo;Divvylore lets us launch production-grade support agents quickly, keep humans
-              in the loop, and resolve customer issues without losing brand voice.&rdquo;
-            </QuoteText>
-            <QuoteAttribution>— Customer success leader, SaaS support team</QuoteAttribution>
-          </QuoteCard>
-        </Container>
-      </QuoteBand>
-
-      <PricingBand id="pricing">
-        <Container>
-          <SectionEyebrow>
-            <Star size={14} /> Pricing
-          </SectionEyebrow>
-          <SectionTitle>{content.pricing?.title}</SectionTitle>
-          <SectionLead>{content.pricing?.subtitle}</SectionLead>
-
-          <BillingToggle role="tablist" aria-label="Billing cycle">
-            <BillingToggleBtn
-              type="button"
-              className={cycle === "monthly" ? "active" : ""}
-              onClick={() => setCycle("monthly")}
-            >
-              Monthly
-            </BillingToggleBtn>
-            <BillingToggleBtn
-              type="button"
-              className={cycle === "yearly" ? "active" : ""}
-              onClick={() => setCycle("yearly")}
-            >
-              Yearly
-            </BillingToggleBtn>
-          </BillingToggle>
-
-          <PlanGrid>
-            {activePlans.map((plan) => {
-              const isUnavailable = plan.isActive === false || plan.isVisible === false;
-              const planPrice = cycle === "monthly" ? plan.monthlyPrice : plan.yearlyPrice;
-              const credits = cycle === "monthly" ? plan.monthlyCredits : plan.yearlyCredits;
-              const bonus = cycle === "yearly" ? plan.yearlyBonusCredits || 0 : 0;
-              const planFeatures = (plan.features || [])
-                .filter((feature) => feature.isIncluded)
-                .sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
-
-              const query = new URLSearchParams({
-                source,
-                placement: "pricing",
-                plan: plan.code || plan.id,
-                billing: cycle,
-              }).toString();
-
-              return (
-                <PlanCard
-                  key={plan.id || plan.name}
-                  featured={!!plan.isPopular}
-                  muted={isUnavailable}
+      <CardStack>
+        <StackCard id="use-cases" $index={nextIndex()} $glow="rose">
+          <Container>
+            <AudienceIntro>{content.audience?.intro}</AudienceIntro>
+            <RoleTabs>
+              {roles.map((role) => (
+                <RoleTab
+                  key={role.id}
+                  type="button"
+                  $active={role.id === activeRole}
+                  onClick={() => setActiveRole(role.id)}
                 >
-                  {plan.isPopular && !isUnavailable && <PlanBadge>Most popular</PlanBadge>}
-                  {isUnavailable && <PlanBadge>Unavailable</PlanBadge>}
-                  <PlanName>{plan.name}</PlanName>
+                  {role.label}
+                </RoleTab>
+              ))}
+            </RoleTabs>
+            <RoleOutcome>
+              <AnimatePresence mode="wait">
+                {selectedRole && (
+                  <motion.div
+                    key={selectedRole.id}
+                    initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
+                    transition={{ duration: 0.28, ease: easeOut }}
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "0.45rem 0.65rem",
+                      alignItems: "baseline",
+                    }}
+                  >
+                    <RoleLabel>{selectedRole.label}</RoleLabel>
+                    <RoleAction>{selectedRole.action}</RoleAction>
+                    <RoleResult>{selectedRole.outcome}</RoleResult>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </RoleOutcome>
 
-                  <PlanPrice>
-                    {plan.isCustomPricing ? (
-                      <PlanAmount>Custom</PlanAmount>
-                    ) : (
+            <ProofGrid style={{ marginTop: "2.2rem" }}>
+              {(content.proof || []).map((item: { title: string; body: string }) => (
+                <ProofCard key={item.title}>
+                  <ProofTitle>{item.title}</ProofTitle>
+                  <ProofBody>{item.body}</ProofBody>
+                </ProofCard>
+              ))}
+            </ProofGrid>
+          </Container>
+        </StackCard>
+
+        <StackCard id="product" $index={nextIndex()} $glow="indigo">
+          <Container>
+            <DisplayTitle>
+              {content.integrations?.titleLine1}
+              <DisplayAccent>{content.integrations?.titleLine2}</DisplayAccent>
+            </DisplayTitle>
+            <SectionLead>{content.integrations?.subtitle}</SectionLead>
+            <ChipRow>
+              {(content.integrations?.items || []).map((item: string) => (
+                <Chip key={item}>{item}</Chip>
+              ))}
+            </ChipRow>
+            <div style={{ marginTop: "1.6rem" }}>
+              <BtnSecondary href="#how-it-works">{content.integrations?.cta}</BtnSecondary>
+            </div>
+          </Container>
+        </StackCard>
+
+        {productBlocks.map(
+          (
+            block: {
+              id: string;
+              eyebrow: string;
+              titleLine1: string;
+              titleLine2: string;
+              body: string;
+              points: string[];
+            },
+            idx: number,
+          ) => (
+            <StackCard
+              key={block.id}
+              id={block.id}
+              $index={nextIndex()}
+              $glow={(["violet", "teal", "indigo"] as const)[idx % 3]}
+            >
+              <Container>
+                <BlockGrid>
+                  <div>
+                    <Eyebrow>{block.eyebrow}</Eyebrow>
+                    <DisplayTitle>
+                      {block.titleLine1}
+                      <DisplayAccent>{block.titleLine2}</DisplayAccent>
+                    </DisplayTitle>
+                    <SectionLead>{block.body}</SectionLead>
+                    <PointList>
+                      {block.points.map((point) => (
+                        <PointItem key={point}>
+                          <CheckCircle2 size={18} color="#2dd4bf" />
+                          <span>{point}</span>
+                        </PointItem>
+                      ))}
+                    </PointList>
+                  </div>
+                  <MockPanel>
+                    {block.id === "agents" && (
                       <>
-                        <PlanAmount>{formatUsd(planPrice)}</PlanAmount>
-                        <PlanCycle>{cycleLabel}</PlanCycle>
+                        <MockRow $tone="ink">Agent · Sales & Support</MockRow>
+                        <MockRow $tone="soft">Tool: capture lead</MockRow>
+                        <MockRow $tone="soft">Tool: resolve access</MockRow>
+                        <MockRow $tone="accent">Guardrail: escalate if unsure</MockRow>
                       </>
                     )}
-                  </PlanPrice>
+                    {block.id === "website" && (
+                      <>
+                        <MockRow $tone="ink">Publish site</MockRow>
+                        <MockRow $tone="soft">Pricing page live</MockRow>
+                        <MockRow $tone="soft">Agent embedded</MockRow>
+                        <MockRow $tone="accent">Ready for first visitors</MockRow>
+                      </>
+                    )}
+                    {block.id === "content" && (
+                      <>
+                        <MockRow $tone="ink">Topic → article</MockRow>
+                        <MockRow $tone="soft">SEO draft published</MockRow>
+                        <MockRow $tone="soft">Synced to agent knowledge</MockRow>
+                        <MockRow $tone="accent">Answers get sharper</MockRow>
+                      </>
+                    )}
+                  </MockPanel>
+                </BlockGrid>
+              </Container>
+            </StackCard>
+          ),
+        )}
 
-                  <PlanDesc>{plan.description}</PlanDesc>
+        <StackCard $index={nextIndex()} $glow="rose">
+          <Container>
+            <DisplayTitle>
+              {content.control?.titleLine1}
+              <DisplayAccent>{content.control?.titleLine2}</DisplayAccent>
+            </DisplayTitle>
+            <SectionLead>{content.control?.subtitle}</SectionLead>
+            <ControlGrid>
+              {(content.control?.points || []).map(
+                (item: { title: string; description: string }) => (
+                  <ControlCard key={item.title}>
+                    <ControlTitle>{item.title}</ControlTitle>
+                    <ControlText>{item.description}</ControlText>
+                  </ControlCard>
+                ),
+              )}
+            </ControlGrid>
+          </Container>
+        </StackCard>
 
-                  <PlanCredits>
-                    {credits.toLocaleString()} credits / {cycle === "monthly" ? "mo" : "yr"}
-                    {bonus > 0 ? ` · +${bonus.toLocaleString()} bonus` : ""}
-                  </PlanCredits>
+        <StackCard id="how-it-works" $index={nextIndex()} $glow="indigo">
+          <Container>
+            <DisplayTitle>
+              {content.howItWorks?.titleLine1}
+              <DisplayAccent>{content.howItWorks?.titleLine2}</DisplayAccent>
+            </DisplayTitle>
+            <SectionLead>{content.howItWorks?.subtitle}</SectionLead>
+            <PointList style={{ marginTop: "1.4rem" }}>
+              {(content.howItWorks?.steps || []).slice(0, 4).map(
+                (step: { title: string }) => (
+                  <PointItem key={step.title}>
+                    <CheckCircle2 size={18} color="#ffffff" />
+                    <span>{step.title}</span>
+                  </PointItem>
+                ),
+              )}
+            </PointList>
+            <StepsGrid>
+              {(content.howItWorks?.steps || []).map(
+                (step: { title: string; description: string }, idx: number) => (
+                  <StepCard key={step.title}>
+                    <StepIndex>{String(idx + 1).padStart(2, "0")}</StepIndex>
+                    <StepTitle>{step.title}</StepTitle>
+                    <StepText>{step.description}</StepText>
+                  </StepCard>
+                ),
+              )}
+            </StepsGrid>
+          </Container>
+        </StackCard>
 
-                  <PlanCta
-                    href={isUnavailable ? undefined : `${APP_URL}${REGISTER_PATH}?${query}`}
-                    muted={isUnavailable}
-                    aria-disabled={isUnavailable}
-                    onClick={(event) => {
-                      if (isUnavailable) {
-                        event.preventDefault();
-                      }
-                    }}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {isUnavailable ? "Not available" : plan.buttonText || "Get started"}
-                  </PlanCta>
+        <StackCard $index={nextIndex()} $glow="teal">
+          <Container>
+            <Eyebrow>See the results</Eyebrow>
+            <DisplayTitle>
+              Case studies
+              <DisplayAccent>from teams going on autopilot</DisplayAccent>
+            </DisplayTitle>
+            <StoriesGrid>
+              {(content.stories || []).map(
+                (story: {
+                  headline: string;
+                  metric: string;
+                  quote: string;
+                  role: string;
+                }) => (
+                  <StoryCard key={story.headline}>
+                    <div>
+                      <StoryHeadline>{story.headline}</StoryHeadline>
+                      <StoryMetric>{story.metric}</StoryMetric>
+                    </div>
+                    <StoryQuote>&ldquo;{story.quote}&rdquo;</StoryQuote>
+                    <StoryRole>{story.role}</StoryRole>
+                  </StoryCard>
+                ),
+              )}
+            </StoriesGrid>
+          </Container>
+        </StackCard>
 
-                  <PlanFeatureList>
-                    {planFeatures.map((feature) => (
-                      <PlanFeatureItem key={`${plan.name}-${feature.name}`}>
-                        <CheckCircle2 size={16} color="#1f3df0" />
-                        <span>{feature.name}</span>
-                      </PlanFeatureItem>
-                    ))}
-                  </PlanFeatureList>
-                </PlanCard>
-              );
-            })}
-          </PlanGrid>
-        </Container>
-      </PricingBand>
+        <StackCard $index={nextIndex()} $glow="violet">
+          <Container>
+            <Eyebrow>{content.enterprise?.eyebrow}</Eyebrow>
+            <DisplayTitle>
+              {content.enterprise?.titleLine1}
+              <DisplayAccent>{content.enterprise?.titleLine2}</DisplayAccent>
+            </DisplayTitle>
+            <SectionLead>{content.enterprise?.subtitle}</SectionLead>
+            <EnterpriseGrid>
+              {(content.enterprise?.cards || []).map(
+                (card: { title: string; description: string }) => (
+                  <EnterpriseCard key={card.title}>
+                    <ControlTitle>{card.title}</ControlTitle>
+                    <ControlText>{card.description}</ControlText>
+                  </EnterpriseCard>
+                ),
+              )}
+            </EnterpriseGrid>
+          </Container>
+        </StackCard>
+      </CardStack>
 
-      <Section id="faq">
-        <Container>
-          <SectionEyebrow>FAQ</SectionEyebrow>
-          <SectionTitle>{content.faq?.title}</SectionTitle>
-          <SectionLead>Answers to common questions before you launch your first agent.</SectionLead>
-          <FaqList>
-            {(content.faq?.items || []).map(
-              (item: { question: string; answer: string }, idx: number) => (
-                <FaqRow key={item.question} {...(idx === 0 ? { open: true } : {})}>
-                  <FaqSummary>
-                    <span>{item.question}</span>
-                    <Plus size={20} aria-hidden />
-                  </FaqSummary>
-                  <FaqBody>{item.answer}</FaqBody>
-                </FaqRow>
-              ),
-            )}
-          </FaqList>
-        </Container>
-      </Section>
-
-      <ClosingCta id="cta">
-        <Container>
-          <ClosingCard>
-            <ClosingTitle>Launch your AI support agent in days.</ClosingTitle>
-            <ClosingLead>
-              Move customer conversations from backlog to resolution with a production-ready agent
-              platform.
-            </ClosingLead>
-            <ClosingActions>
-              <ClosingPrimaryCta
-                href={buildAuthUrl(REGISTER_PATH, { placement: "bottom-cta" })}
-                target="_blank"
-                rel="noreferrer"
+      <BelowStack>
+        <FlatSection id="pricing">
+          <Container>
+            <DisplayTitle>{content.pricing?.title}</DisplayTitle>
+            <SectionLead>{content.pricing?.subtitle}</SectionLead>
+            <BillingToggle role="tablist" aria-label="Billing cycle">
+              <BillingToggleBtn
+                type="button"
+                className={cycle === "monthly" ? "active" : ""}
+                onClick={() => setCycle("monthly")}
               >
-                Get started
-                <ArrowRight size={16} />
-              </ClosingPrimaryCta>
-              <ClosingGhostCta
-                href={buildAuthUrl(LOGIN_PATH, { placement: "bottom-cta" })}
-                target="_blank"
-                rel="noreferrer"
+                Monthly
+              </BillingToggleBtn>
+              <BillingToggleBtn
+                type="button"
+                className={cycle === "yearly" ? "active" : ""}
+                onClick={() => setCycle("yearly")}
               >
-                Sign in
-              </ClosingGhostCta>
-            </ClosingActions>
-          </ClosingCard>
-        </Container>
-      </ClosingCta>
+                Yearly
+              </BillingToggleBtn>
+            </BillingToggle>
+
+            <PlanGrid>
+              {activePlans.map((plan) => {
+                const isUnavailable = plan.isActive === false || plan.isVisible === false;
+                const planPrice = cycle === "monthly" ? plan.monthlyPrice : plan.yearlyPrice;
+                const credits = cycle === "monthly" ? plan.monthlyCredits : plan.yearlyCredits;
+                const bonus = cycle === "yearly" ? plan.yearlyBonusCredits || 0 : 0;
+                const planFeatures = (plan.features || [])
+                  .filter((feature) => feature.isIncluded)
+                  .sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
+                const query = new URLSearchParams({
+                  source,
+                  placement: "pricing",
+                  plan: plan.code || plan.id,
+                  billing: cycle,
+                }).toString();
+
+                return (
+                  <PlanCard key={plan.id || plan.name} featured={!!plan.isPopular} muted={isUnavailable}>
+                    {plan.isPopular && !isUnavailable && <PlanBadge>Most popular</PlanBadge>}
+                    {isUnavailable && <PlanBadge>Unavailable</PlanBadge>}
+                    <PlanName>{plan.name}</PlanName>
+                    <PlanPrice>
+                      {plan.isCustomPricing ? (
+                        <PlanAmount>Custom</PlanAmount>
+                      ) : (
+                        <>
+                          <PlanAmount>{formatUsd(planPrice)}</PlanAmount>
+                          <PlanCycle>{cycleLabel}</PlanCycle>
+                        </>
+                      )}
+                    </PlanPrice>
+                    <PlanDesc>{plan.description}</PlanDesc>
+                    <PlanCredits>
+                      {credits.toLocaleString()} credits / {cycle === "monthly" ? "mo" : "yr"}
+                      {bonus > 0 ? ` · +${bonus.toLocaleString()} bonus` : ""}
+                    </PlanCredits>
+                    <PlanCta
+                      href={isUnavailable ? undefined : `${APP_URL}${REGISTER_PATH}?${query}`}
+                      muted={isUnavailable}
+                      aria-disabled={isUnavailable}
+                      onClick={(event) => {
+                        if (isUnavailable) event.preventDefault();
+                      }}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {isUnavailable ? "Not available" : plan.buttonText || "Get started"}
+                    </PlanCta>
+                    <PlanFeatureList>
+                      {planFeatures.map((feature) => (
+                        <PlanFeatureItem key={`${plan.name}-${feature.name}`}>
+                          <CheckCircle2 size={16} color="#2dd4bf" />
+                          <span>{feature.name}</span>
+                        </PlanFeatureItem>
+                      ))}
+                    </PlanFeatureList>
+                  </PlanCard>
+                );
+              })}
+            </PlanGrid>
+          </Container>
+        </FlatSection>
+
+        <FlatSection id="faq">
+          <Container>
+            <FaqBlock>
+              <DisplayTitle>{content.faq?.title}</DisplayTitle>
+              <FaqList>
+                {(content.faq?.items || []).map(
+                  (item: { question: string; answer: string }, idx: number) => (
+                    <FaqRow key={item.question} {...(idx === 0 ? { open: true } : {})}>
+                      <FaqSummary>
+                        <span>{item.question}</span>
+                        <Plus size={20} aria-hidden />
+                      </FaqSummary>
+                      <FaqBody>{item.answer}</FaqBody>
+                    </FaqRow>
+                  ),
+                )}
+              </FaqList>
+            </FaqBlock>
+          </Container>
+        </FlatSection>
+
+        <FlatSection id="cta">
+          <Container>
+            <ClosingInner>
+              <ClosingTitle>
+                {content.closing?.titleLine1}
+                <ClosingAccent>{content.closing?.titleLine2}</ClosingAccent>
+              </ClosingTitle>
+              <ClosingLead>{content.closing?.subtitle}</ClosingLead>
+              <ClosingActions>
+                <BtnPrimary
+                  href={buildAuthUrl(REGISTER_PATH, { placement: "bottom-cta" })}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {content.closing?.cta || "Start building"}
+                  <ArrowRight size={16} />
+                </BtnPrimary>
+                <BtnSecondary
+                  href={buildAuthUrl(LOGIN_PATH, { placement: "bottom-cta" })}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Sign in
+                </BtnSecondary>
+              </ClosingActions>
+            </ClosingInner>
+          </Container>
+        </FlatSection>
+      </BelowStack>
     </Page>
   );
 };
