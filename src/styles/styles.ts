@@ -9,7 +9,7 @@ export const Styles = createGlobalStyle`
         --bg-ink: #ffffff;
         --text-primary: #f5f7ff;
         --text-secondary: rgba(232, 238, 255, 0.86);
-        --text-muted: rgba(220, 226, 255, 0.58);
+        --text-muted: rgba(220, 226, 255, 0.72);
         --accent: #8b5cf6;
         --accent-strong: #7c3aed;
         --accent-soft: rgba(139, 92, 246, 0.22);

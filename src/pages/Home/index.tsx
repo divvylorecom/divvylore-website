@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { ArrowRight, CheckCircle2, Plus } from "lucide-react";
 import siteContent from "../../content/SiteContent.json";
 import {
@@ -126,8 +126,12 @@ type AudienceRole = {
   outcome: string;
 };
 
-const APP_URL = "https://app.divvylore.com";
+type MockLine = { tone?: "accent" | "soft" | "ink"; text: string };
+
+const APP_URL: string = (siteContent as any).appUrls?.base || "https://app.divvylore.com";
+const PRODUCT: string = (siteContent as any).product;
 const PRICING_API_BASE = (import.meta.env.VITE_PORTAL_API_BASE || APP_URL).replace(/\/$/, "");
+const PRICING_LIVE_HOSTS: string[] = (siteContent as any).pricing?.liveHosts || [];
 const REGISTER_PATH = "/register";
 const LOGIN_PATH = "/login";
 const easeOut = [0.22, 1, 0.36, 1] as const;
@@ -196,10 +200,15 @@ const Home = () => {
   }, [roles, reduceMotion]);
 
   useEffect(() => {
+    // Only call the portal from hosts it allows (CORS). Elsewhere (local preview,
+    // audits) the content plans are shown and nothing is logged.
+    const host = typeof window !== "undefined" ? window.location.hostname : "";
+    if (!import.meta.env.VITE_PORTAL_API_BASE && !PRICING_LIVE_HOSTS.includes(host)) return;
     const controller = new AbortController();
     const loadPlans = async () => {
       try {
-        const response = await fetch(`${PRICING_API_BASE}/account/tenant/plans`, {
+        const query = new URLSearchParams({ product: PRODUCT }).toString();
+        const response = await fetch(`${PRICING_API_BASE}/account/tenant/plans?${query}`, {
           method: "GET",
           headers: { Accept: "application/json" },
           signal: controller.signal,
@@ -220,8 +229,8 @@ const Home = () => {
           }))
           .sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
         if (normalized.length > 0) setPlans(normalized);
-      } catch (error) {
-        if ((error as Error).name === "AbortError") return;
+      } catch {
+        // Keep the fallback plans silently.
       }
     };
     loadPlans();
@@ -230,11 +239,12 @@ const Home = () => {
 
   const activePlans = useMemo(() => plans.filter((plan) => plan.name), [plans]);
   const cycleLabel = cycle === "monthly" ? "/month" : "/year";
-  const source = typeof window !== "undefined" ? window.location.hostname : "divvylore.com";
+  const source =
+    typeof window !== "undefined" ? window.location.hostname : content.brand?.domain || "";
   const selectedRole = roles.find((role) => role.id === activeRole) || roles[0];
 
   const buildAuthUrl = (path: string, params?: Record<string, string>) => {
-    const query = new URLSearchParams({ source, ...(params || {}) }).toString();
+    const query = new URLSearchParams({ source, product: PRODUCT, ...(params || {}) }).toString();
     return `${APP_URL}${path}?${query}`;
   };
 
@@ -247,7 +257,7 @@ const Home = () => {
         <Container>
           <HeroGrid>
             <HeroCopy>
-              <motion.div
+              <m.div
                 initial={reduceMotion ? false : { opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.55, ease: easeOut }}
@@ -258,7 +268,7 @@ const Home = () => {
                   {content.hero?.titleLine2}
                   <HeroTitleAccent>{content.hero?.titleAccent}</HeroTitleAccent>
                 </HeroTitle>
-              </motion.div>
+              </m.div>
               <HeroLead>{content.hero?.description}</HeroLead>
               <HeroActions>
                 <BtnPrimary
@@ -277,33 +287,31 @@ const Home = () => {
 
             <HeroVisual aria-hidden>
               <CanvasLine />
-              <CanvasNode $x={22} $y={28}>
-                Website visit
-                <span>yourbrand.com</span>
-              </CanvasNode>
-              <CanvasNode $x={50} $y={48} $accent>
-                AI Agent
-                <span>sales + support</span>
-              </CanvasNode>
-              <CanvasNode $x={78} $y={30}>
-                Lead captured
-                <span>CRM-ready</span>
-              </CanvasNode>
-              <CanvasNode $x={76} $y={68}>
-                Issue resolved
-                <span>or handed off</span>
-              </CanvasNode>
-              <ChatPreview>
-                <ChatHead>
-                  <ChatDot />
-                  Divvylore Agent · Online
-                </ChatHead>
-                <ChatBody>
-                  <Bubble>Do you offer onboarding help?</Bubble>
-                  <Bubble $out>Yes — I can book a demo or fix billing now.</Bubble>
-                  <Bubble>Book Thursday.</Bubble>
-                </ChatBody>
-              </ChatPreview>
+              {(content.heroVisual?.nodes || []).map(
+                (node: { label: string; sub: string; x: number; y: number; accent?: boolean }) => (
+                  <CanvasNode key={node.label} $x={node.x} $y={node.y} $accent={!!node.accent}>
+                    {node.label}
+                    <span>{node.sub}</span>
+                  </CanvasNode>
+                ),
+              )}
+              {content.heroVisual?.chat && (
+                <ChatPreview>
+                  <ChatHead>
+                    <ChatDot />
+                    {content.heroVisual.chat.title}
+                  </ChatHead>
+                  <ChatBody>
+                    {(content.heroVisual.chat.messages || []).map(
+                      (msg: { text: string; out?: boolean }) => (
+                        <Bubble key={msg.text} $out={!!msg.out}>
+                          {msg.text}
+                        </Bubble>
+                      ),
+                    )}
+                  </ChatBody>
+                </ChatPreview>
+              )}
             </HeroVisual>
           </HeroGrid>
         </Container>
@@ -328,7 +336,7 @@ const Home = () => {
             <RoleOutcome>
               <AnimatePresence mode="wait">
                 {selectedRole && (
-                  <motion.div
+                  <m.div
                     key={selectedRole.id}
                     initial={reduceMotion ? false : { opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -344,7 +352,7 @@ const Home = () => {
                     <RoleLabel>{selectedRole.label}</RoleLabel>
                     <RoleAction>{selectedRole.action}</RoleAction>
                     <RoleResult>{selectedRole.outcome}</RoleResult>
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
             </RoleOutcome>
@@ -387,6 +395,7 @@ const Home = () => {
               titleLine2: string;
               body: string;
               points: string[];
+              mock?: MockLine[];
             },
             idx: number,
           ) => (
@@ -414,31 +423,12 @@ const Home = () => {
                       ))}
                     </PointList>
                   </div>
-                  <MockPanel>
-                    {block.id === "agents" && (
-                      <>
-                        <MockRow $tone="ink">Agent · Sales & Support</MockRow>
-                        <MockRow $tone="soft">Tool: capture lead</MockRow>
-                        <MockRow $tone="soft">Tool: resolve access</MockRow>
-                        <MockRow $tone="accent">Guardrail: escalate if unsure</MockRow>
-                      </>
-                    )}
-                    {block.id === "website" && (
-                      <>
-                        <MockRow $tone="ink">Publish site</MockRow>
-                        <MockRow $tone="soft">Pricing page live</MockRow>
-                        <MockRow $tone="soft">Agent embedded</MockRow>
-                        <MockRow $tone="accent">Ready for first visitors</MockRow>
-                      </>
-                    )}
-                    {block.id === "content" && (
-                      <>
-                        <MockRow $tone="ink">Topic → article</MockRow>
-                        <MockRow $tone="soft">SEO draft published</MockRow>
-                        <MockRow $tone="soft">Synced to agent knowledge</MockRow>
-                        <MockRow $tone="accent">Answers get sharper</MockRow>
-                      </>
-                    )}
+                  <MockPanel aria-hidden>
+                    {(block.mock || []).map((line) => (
+                      <MockRow key={line.text} $tone={line.tone || "soft"}>
+                        {line.text}
+                      </MockRow>
+                    ))}
                   </MockPanel>
                 </BlockGrid>
               </Container>
@@ -497,34 +487,31 @@ const Home = () => {
           </Container>
         </StackCard>
 
-        <StackCard $index={nextIndex()} $glow="teal">
-          <Container>
-            <Eyebrow>See the results</Eyebrow>
-            <DisplayTitle>
-              Case studies
-              <DisplayAccent>from teams going on autopilot</DisplayAccent>
-            </DisplayTitle>
-            <StoriesGrid>
-              {(content.stories || []).map(
-                (story: {
-                  headline: string;
-                  metric: string;
-                  quote: string;
-                  role: string;
-                }) => (
-                  <StoryCard key={story.headline}>
-                    <div>
-                      <StoryHeadline>{story.headline}</StoryHeadline>
-                      <StoryMetric>{story.metric}</StoryMetric>
-                    </div>
-                    <StoryQuote>&ldquo;{story.quote}&rdquo;</StoryQuote>
-                    <StoryRole>{story.role}</StoryRole>
-                  </StoryCard>
-                ),
-              )}
-            </StoriesGrid>
-          </Container>
-        </StackCard>
+        {(content.stories?.items || []).length > 0 && (
+          <StackCard id={content.stories?.id} $index={nextIndex()} $glow="teal">
+            <Container>
+              <Eyebrow>{content.stories?.eyebrow}</Eyebrow>
+              <DisplayTitle>
+                {content.stories?.titleLine1}
+                <DisplayAccent>{content.stories?.titleLine2}</DisplayAccent>
+              </DisplayTitle>
+              <StoriesGrid>
+                {(content.stories?.items || []).map(
+                  (story: { headline: string; metric: string; body: string; fit: string }) => (
+                    <StoryCard key={story.headline}>
+                      <div>
+                        <StoryHeadline>{story.headline}</StoryHeadline>
+                        <StoryMetric>{story.metric}</StoryMetric>
+                      </div>
+                      <StoryQuote>{story.body}</StoryQuote>
+                      <StoryRole>{story.fit}</StoryRole>
+                    </StoryCard>
+                  ),
+                )}
+              </StoriesGrid>
+            </Container>
+          </StackCard>
+        )}
 
         <StackCard $index={nextIndex()} $glow="violet">
           <Container>
@@ -553,10 +540,11 @@ const Home = () => {
           <Container>
             <DisplayTitle>{content.pricing?.title}</DisplayTitle>
             <SectionLead>{content.pricing?.subtitle}</SectionLead>
-            <BillingToggle role="tablist" aria-label="Billing cycle">
+            <BillingToggle role="group" aria-label="Billing cycle">
               <BillingToggleBtn
                 type="button"
                 className={cycle === "monthly" ? "active" : ""}
+                aria-pressed={cycle === "monthly"}
                 onClick={() => setCycle("monthly")}
               >
                 Monthly
@@ -564,6 +552,7 @@ const Home = () => {
               <BillingToggleBtn
                 type="button"
                 className={cycle === "yearly" ? "active" : ""}
+                aria-pressed={cycle === "yearly"}
                 onClick={() => setCycle("yearly")}
               >
                 Yearly
@@ -581,6 +570,7 @@ const Home = () => {
                   .sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
                 const query = new URLSearchParams({
                   source,
+                  product: PRODUCT,
                   placement: "pricing",
                   plan: plan.code || plan.id,
                   billing: cycle,
@@ -602,10 +592,12 @@ const Home = () => {
                       )}
                     </PlanPrice>
                     <PlanDesc>{plan.description}</PlanDesc>
-                    <PlanCredits>
-                      {credits.toLocaleString()} credits / {cycle === "monthly" ? "mo" : "yr"}
-                      {bonus > 0 ? ` · +${bonus.toLocaleString()} bonus` : ""}
-                    </PlanCredits>
+                    {credits > 0 && (
+                      <PlanCredits>
+                        {credits.toLocaleString()} credits / {cycle === "monthly" ? "mo" : "yr"}
+                        {bonus > 0 ? ` · +${bonus.toLocaleString()} bonus` : ""}
+                      </PlanCredits>
+                    )}
                     <PlanCta
                       href={isUnavailable ? undefined : `${APP_URL}${REGISTER_PATH}?${query}`}
                       muted={isUnavailable}
@@ -639,13 +631,26 @@ const Home = () => {
               <DisplayTitle>{content.faq?.title}</DisplayTitle>
               <FaqList>
                 {(content.faq?.items || []).map(
-                  (item: { question: string; answer: string }, idx: number) => (
+                  (
+                    item: { question: string; answer: string; link?: { label: string; url: string } },
+                    idx: number,
+                  ) => (
                     <FaqRow key={item.question} {...(idx === 0 ? { open: true } : {})}>
                       <FaqSummary>
                         <span>{item.question}</span>
                         <Plus size={20} aria-hidden />
                       </FaqSummary>
-                      <FaqBody>{item.answer}</FaqBody>
+                      <FaqBody>
+                        {item.answer}
+                        {item.link && (
+                          <>
+                            {" "}
+                            <a href={item.link.url} style={{ textDecoration: "underline" }}>
+                              {item.link.label}
+                            </a>
+                          </>
+                        )}
+                      </FaqBody>
                     </FaqRow>
                   ),
                 )}

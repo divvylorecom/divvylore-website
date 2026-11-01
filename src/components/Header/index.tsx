@@ -18,17 +18,18 @@ import {
 
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const source = typeof window !== "undefined" ? window.location.hostname : "divvylore.com";
-  const registerUrl = `${siteContent.appUrls.register}?source=${encodeURIComponent(source)}&placement=header`;
-  const loginUrl = `${siteContent.appUrls.login}?source=${encodeURIComponent(source)}&placement=header`;
+  const source = typeof window !== "undefined" ? window.location.hostname : siteContent.brand.domain;
+  const query = new URLSearchParams({ source, product: siteContent.product, placement: "header" }).toString();
+  const registerUrl = `${siteContent.appUrls.register}?${query}`;
+  const loginUrl = `${siteContent.appUrls.login}?${query}`;
 
   return (
     <HeaderShell>
       <div style={{ position: "relative", width: "min(1120px, 100%)" }}>
         <HeaderInner>
-          <Brand href="/" aria-label="Divvylore home">
-            <BrandMark src="/img/svg/logo.svg" alt="" />
-            <BrandWord>Divvylore</BrandWord>
+          <Brand href="/" aria-label={`${siteContent.brand.name} home`}>
+            <BrandMark src="/img/svg/logo.svg" alt="" width={32} height={32} />
+            <BrandWord>{siteContent.brand.name}</BrandWord>
           </Brand>
 
           <Nav>

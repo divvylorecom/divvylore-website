@@ -461,8 +461,11 @@ export const Bubble = styled.div<{ $out?: boolean }>`
   color: ${(p) => (p.$out ? "#ffffff" : "#101010")};
 `;
 
-export const AudienceIntro = styled.p`
+export const AudienceIntro = styled.h2`
   margin: 0 0 1.1rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  line-height: 1.5;
   color: var(--text-secondary);
   font-size: 1.02rem;
 `;
@@ -506,7 +509,7 @@ export const RoleAction = styled.span`
   font-family: var(--font-serif);
   font-style: italic;
   font-size: clamp(1.35rem, 3vw, 1.9rem);
-  color: rgba(245, 245, 247, 0.5);
+  color: rgba(245, 245, 247, 0.74);
 `;
 
 export const RoleResult = styled.span`
@@ -560,7 +563,7 @@ export const Eyebrow = styled.span`
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.74);
   margin-bottom: 0.7rem;
 `;
 
@@ -804,7 +807,7 @@ export const StoryMetric = styled.span`
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 1.1rem;
-  color: rgba(245, 245, 247, 0.5);
+  color: rgba(245, 245, 247, 0.74);
 `;
 
 export const StoryQuote = styled.p`
@@ -817,7 +820,7 @@ export const StoryQuote = styled.p`
 export const StoryRole = styled.span`
   font-size: 0.88rem;
   font-weight: 700;
-  color: rgba(245, 245, 247, 0.5);
+  color: rgba(245, 245, 247, 0.74);
 `;
 
 export const EnterpriseGrid = styled.div`
@@ -913,7 +916,7 @@ export const PlanBadge = styled.span`
   right: 1rem;
   padding: 0.28rem 0.6rem;
   border-radius: 999px;
-  background: var(--accent);
+  background: var(--accent-strong);
   color: #ffffff;
   font-size: 0.7rem;
   letter-spacing: 0.04em;

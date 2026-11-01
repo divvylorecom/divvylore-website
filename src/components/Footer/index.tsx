@@ -16,9 +16,11 @@ import {
 } from "./styles";
 
 const Footer = () => {
-  const source = typeof window !== "undefined" ? window.location.hostname : "divvylore.com";
-  const registerUrl = `${siteContent.appUrls.register}?source=${encodeURIComponent(source)}&placement=footer`;
-  const loginUrl = `${siteContent.appUrls.login}?source=${encodeURIComponent(source)}&placement=footer`;
+  const source = typeof window !== "undefined" ? window.location.hostname : siteContent.brand.domain;
+  const query = new URLSearchParams({ source, product: siteContent.product, placement: "footer" }).toString();
+  const registerUrl = `${siteContent.appUrls.register}?${query}`;
+  const loginUrl = `${siteContent.appUrls.login}?${query}`;
+  const crossLink = siteContent.footer.crossLink;
   const privacyUrl = siteContent.legalUrls.privacyPolicy;
   const termsUrl = siteContent.legalUrls.termsAndConditions;
   const refundUrl = siteContent.legalUrls.refundPolicy;
@@ -27,11 +29,19 @@ const Footer = () => {
     <FooterShell>
       <FooterInner>
         <FooterBrandBlock>
-          <FooterBrandRow href="/" aria-label="Divvylore home">
-            <FooterMark src="/img/svg/logo.svg" alt="" />
-            <FooterBrandName>Divvylore</FooterBrandName>
+          <FooterBrandRow href="/" aria-label={`${siteContent.brand.name} home`}>
+            <FooterMark src="/img/svg/logo.svg" alt="" width={30} height={30} />
+            <FooterBrandName>{siteContent.brand.name}</FooterBrandName>
           </FooterBrandRow>
           <FooterTag>{siteContent.brand.tagline}</FooterTag>
+          {crossLink && (
+            <FooterTag>
+              {crossLink.text}{" "}
+              <FooterLink href={crossLink.url} style={{ textDecoration: "underline" }}>
+                {crossLink.label}
+              </FooterLink>
+            </FooterTag>
+          )}
         </FooterBrandBlock>
 
         <FooterCols>
@@ -49,7 +59,7 @@ const Footer = () => {
             <FooterLink href={siteContent.appUrls.base}>Customer portal</FooterLink>
             <FooterLink href={registerUrl}>Create account</FooterLink>
             <FooterLink href={loginUrl}>Sign in</FooterLink>
-            <FooterLink href="mailto:hello@divvylore.com">Contact</FooterLink>
+            <FooterLink href={`mailto:${siteContent.contactEmail}`}>Contact</FooterLink>
           </FooterCol>
 
           <FooterCol>
