@@ -1,7 +1,10 @@
 {
+  "product": "chat",
+  "contactEmail": "hello@divvylore.com",
   "brand": {
     "name": "Divvylore",
-    "tagline": "Turn your website into sales and support on autopilot with AI agents"
+    "domain": "divvylore.com",
+    "tagline": "Agentic Chat: AI agents on your website for sales and support, with humans in the loop."
   },
   "appUrls": {
     "base": "https://app.divvylore.com",
@@ -14,82 +17,144 @@
     "refundPolicy": "https://blog.divvylore.com/refund-policy"
   },
   "navigation": [
-    { "label": "Product", "href": "#product" },
-    { "label": "Use cases", "href": "#use-cases" },
-    { "label": "How it works", "href": "#how-it-works" },
-    { "label": "Pricing", "href": "#pricing" }
+    {
+      "label": "Product",
+      "href": "#product"
+    },
+    {
+      "label": "Use cases",
+      "href": "#use-cases"
+    },
+    {
+      "label": "How it works",
+      "href": "#how-it-works"
+    },
+    {
+      "label": "Pricing",
+      "href": "#pricing"
+    }
   ],
   "hero": {
-    "titleLine1": "Turn your website into",
-    "titleLine2": "sales and support on autopilot",
-    "titleAccent": "with AI agents",
-    "description": "Build visually in the portal, deploy agents on your site, and keep humans in the loop. Every conversation — sales or support — visible, controllable, improvable.",
-    "primaryCta": { "label": "Get started for free", "url": "https://app.divvylore.com/register" },
-    "secondaryCta": { "label": "See pricing", "url": "#pricing" }
+    "titleLine1": "Answer every visitor",
+    "titleLine2": "around the clock",
+    "titleAccent": "with AI chat agents",
+    "description": "Agentic Chat puts AI agents on your website that know who they are talking to, look things up in your own systems, and hand off to your team when it matters. Every conversation visible, controllable, improvable.",
+    "primaryCta": {
+      "label": "Get started for free",
+      "url": "https://app.divvylore.com/register"
+    },
+    "secondaryCta": {
+      "label": "See pricing",
+      "url": "#pricing"
+    }
+  },
+  "heroVisual": {
+    "nodes": [
+      {
+        "label": "Visitor says hi",
+        "sub": "on yourbrand.com",
+        "x": 24,
+        "y": 20
+      },
+      {
+        "label": "Workflow",
+        "sub": "identify + look up",
+        "x": 50,
+        "y": 38,
+        "accent": true
+      },
+      {
+        "label": "Agent answers",
+        "sub": "with your data",
+        "x": 78,
+        "y": 20
+      },
+      {
+        "label": "Human hand-off",
+        "sub": "full context",
+        "x": 22,
+        "y": 62
+      }
+    ],
+    "chat": {
+      "title": "Support agent · Online",
+      "messages": [
+        {
+          "text": "Where is my order #4821?"
+        },
+        {
+          "text": "It shipped yesterday and arrives Thursday.",
+          "out": true
+        },
+        {
+          "text": "Can I change the address?"
+        }
+      ]
+    }
   },
   "audience": {
-    "intro": "The platform for teams who want their website working overnight including",
+    "intro": "Built for teams who want every website conversation answered, including",
     "roles": [
       {
         "id": "sales",
         "label": "Sales",
         "action": "can",
-        "outcome": "Capture and qualify leads from every visit"
+        "outcome": "Qualify leads and book meetings from every visit"
       },
       {
         "id": "support",
         "label": "Support",
         "action": "can",
-        "outcome": "Resolve common issues without waiting on a queue"
+        "outcome": "Resolve common questions without a queue"
       },
       {
-        "id": "marketing",
-        "label": "Marketing",
+        "id": "service",
+        "label": "Service desks",
         "action": "can",
-        "outcome": "Publish content that ranks and trains the agent"
+        "outcome": "Pick up hand-offs with the whole chat in view"
       },
       {
         "id": "ops",
         "label": "Founders",
         "action": "can",
-        "outcome": "Launch a site and an agent in the same afternoon"
+        "outcome": "Put an agent on the site in an afternoon"
       },
       {
         "id": "you",
         "label": "You",
         "action": "can",
-        "outcome": "Put sales and support on autopilot today"
+        "outcome": "Answer visitors on web, WhatsApp, Messenger and Telegram"
       }
     ]
   },
   "proof": [
     {
-      "title": "Agents + websites + content.",
-      "body": "One platform for the full visitor journey — not a bolted-on chatbot."
+      "title": "Workflows, not a bare chatbot.",
+      "body": "Each conversation follows steps you design: identify the visitor, look them up, then let the agent answer."
     },
     {
       "title": "Sales and support together.",
-      "body": "Qualify deals and resolve issues from the same agent control plane."
+      "body": "Qualify leads and resolve issues from the same agent and the same inbox."
     },
     {
       "title": "Humans stay in control.",
-      "body": "Guardrails, handoff, and full conversation context when it matters."
+      "body": "Guardrails, live hand-off and full conversation history when it matters."
     }
   ],
   "integrations": {
-    "titleLine1": "Plug AI into your website &",
-    "titleLine2": "the knowledge that powers it",
-    "subtitle": "Deploy agents on your domain. Publish pages. Feed content. Connect the tools your team already uses.",
-    "cta": "Explore the product",
+    "titleLine1": "Plug AI chat into your website &",
+    "titleLine2": "the systems behind it",
+    "subtitle": "Add the chat widget to your domain, connect the tools your team already uses, and reach visitors on the channels they prefer.",
+    "cta": "See how it works",
     "items": [
-      "Website chat",
+      "Website chat widget",
       "Lead capture",
-      "Support handoff",
-      "Content & SEO",
-      "Analytics",
-      "Billing",
-      "Knowledge sync",
-      "Custom tools"
+      "Live chat & hand-off",
+      "Support queues",
+      "Chat history",
+      "WhatsApp, Messenger, Telegram",
+      "Your own data lookups",
+      "Guardrails"
     ]
   },
   "productBlocks": [
@@ -98,111 +163,201 @@
       "eyebrow": "AI agents",
       "titleLine1": "Build AI agents",
       "titleLine2": "you can actually follow",
-      "body": "Configure prompts, tools, and guardrails. Inspect every reply. Keep humans in the loop when confidence drops or stakes rise.",
+      "body": "Configure instructions, tools and guardrails. Inspect every reply. Keep people in the loop when confidence drops or stakes rise.",
       "points": [
         "Sales and support from one agent",
-        "Controlled actions — not just answers",
-        "Escalation with full chat history"
+        "Agents act through tools you approve",
+        "Guardrails keep answers on-brand"
+      ],
+      "mock": [
+        {
+          "tone": "ink",
+          "text": "Agent · Sales & Support"
+        },
+        {
+          "tone": "soft",
+          "text": "Tool: capture lead"
+        },
+        {
+          "tone": "soft",
+          "text": "Tool: check order status"
+        },
+        {
+          "tone": "accent",
+          "text": "Guardrail: escalate if unsure"
+        }
       ]
     },
     {
-      "id": "website",
-      "eyebrow": "Websites",
-      "titleLine1": "Ship the site",
-      "titleLine2": "where visitors already arrive",
-      "body": "Publish a polished website, then embed your agent where intent is highest — pricing, contact, product pages.",
+      "id": "workflows",
+      "eyebrow": "Workflows",
+      "titleLine1": "Workflows that decide",
+      "titleLine2": "each conversation",
+      "body": "Design the path a conversation takes: recognise the visitor, look them up in your own system, choose the right agent, and decide when a person steps in.",
       "points": [
-        "Launch or connect your domain",
-        "Brand-consistent pages",
-        "Agent ready on day one"
+        "Identify the visitor first",
+        "Look up records in your own system",
+        "Route to the right agent or person"
+      ],
+      "mock": [
+        {
+          "tone": "ink",
+          "text": "Chat started"
+        },
+        {
+          "tone": "soft",
+          "text": "Identify visitor by email"
+        },
+        {
+          "tone": "soft",
+          "text": "Look up customer record"
+        },
+        {
+          "tone": "accent",
+          "text": "Agent answers with context"
+        }
       ]
     },
     {
-      "id": "content",
-      "eyebrow": "Content",
-      "titleLine1": "Grow with content",
-      "titleLine2": "that fuels SEO and agents",
-      "body": "Turn topics into published articles that strengthen discovery and become the knowledge your agent answers from.",
+      "id": "live-chat",
+      "eyebrow": "Live chat & queues",
+      "titleLine1": "Hand off to people",
+      "titleLine2": "without losing the thread",
+      "body": "When a visitor needs a person, the conversation moves to a support queue with the full history. Your team answers live in the same window.",
       "points": [
-        "Articles that rank",
-        "Same knowledge as the agent",
-        "Improve from real conversations"
+        "Live chat with human hand-off",
+        "Support queues for your team",
+        "Full chat history and leads in one place"
+      ],
+      "mock": [
+        {
+          "tone": "ink",
+          "text": "Queue · Billing"
+        },
+        {
+          "tone": "soft",
+          "text": "3 conversations waiting"
+        },
+        {
+          "tone": "soft",
+          "text": "Agent summary attached"
+        },
+        {
+          "tone": "accent",
+          "text": "Picked up by a teammate"
+        }
+      ]
+    },
+    {
+      "id": "channels",
+      "eyebrow": "Channels",
+      "titleLine1": "One agent,",
+      "titleLine2": "everywhere your customers chat",
+      "body": "Run the same agent on your website, WhatsApp, Messenger and Telegram. Same instructions, same guardrails, one place to review conversations.",
+      "points": [
+        "Website widget on your domain",
+        "WhatsApp, Messenger and Telegram",
+        "One history across channels"
+      ],
+      "mock": [
+        {
+          "tone": "ink",
+          "text": "Agent · Store assistant"
+        },
+        {
+          "tone": "soft",
+          "text": "Website widget: live"
+        },
+        {
+          "tone": "soft",
+          "text": "WhatsApp: connected"
+        },
+        {
+          "tone": "accent",
+          "text": "Telegram: connected"
+        }
       ]
     }
   ],
   "control": {
-    "titleLine1": "See every prompt.",
+    "titleLine1": "See every step.",
     "titleLine2": "Steer every outcome.",
-    "subtitle": "Other tools lock you into opaque chat. With Divvylore, you see prompts, tools, outcomes, and handoffs — then tighten the loop.",
+    "subtitle": "Other tools lock you into opaque chat. With Agentic Chat you see the workflow, the tools the agent used, the outcome and every hand-off, then tighten the loop.",
     "points": [
       {
         "title": "Configure without guessing",
-        "description": "Prompts, tools, and brand voice side by side with live preview."
+        "description": "Instructions, tools and brand voice side by side with a live preview."
       },
       {
         "title": "Test with real scenarios",
-        "description": "Try sales and support paths before visitors hit production."
+        "description": "Try sales and support paths before visitors reach production."
       },
       {
         "title": "Improve from outcomes",
-        "description": "Review chats, leads, and escalations — then ship the next version."
+        "description": "Review chats, leads and escalations, then ship the next version."
       }
     ]
   },
   "howItWorks": {
     "titleLine1": "Move fast.",
     "titleLine2": "Break nothing.",
-    "subtitle": "Short feedback loops from first deploy to ongoing improvement.",
+    "subtitle": "Short feedback loops from first chat to ongoing improvement.",
     "steps": [
       {
-        "title": "Choose your starting point",
-        "description": "Begin with an agent, a website, or content. Add the rest anytime — same knowledge layer."
+        "title": "Create your agent",
+        "description": "Give it instructions, your brand voice and the tools it may use."
       },
       {
-        "title": "Deploy on your site",
-        "description": "Go live with guardrails so the agent can sell and support in your brand voice."
+        "title": "Design the workflow",
+        "description": "Decide how each conversation runs: identify, look up, answer, hand off."
       },
       {
-        "title": "Feed it real knowledge",
-        "description": "Publish content and connect context so answers stay accurate as you grow."
+        "title": "Go live on your site",
+        "description": "Add the chat widget to your website and connect messaging channels."
       },
       {
-        "title": "Tighten from production",
-        "description": "Replay conversations, fix weak spots, and keep autopilot sharp."
+        "title": "Improve from real chats",
+        "description": "Review history, fix weak spots and keep your team in the loop."
       }
     ]
   },
-  "stories": [
-    {
-      "headline": "How a product team put support on autopilot",
-      "metric": "and cut repeat contacts on common issues",
-      "quote": "Divvylore let us launch a production agent quickly, keep humans in the loop, and stop babysitting every chat.",
-      "role": "Customer success lead"
-    },
-    {
-      "headline": "How a founder turned site traffic into pipeline",
-      "metric": "without hiring a full-time SDR",
-      "quote": "Visitors ask pricing questions at midnight. The agent qualifies them and books the demo — we wake up to meetings.",
-      "role": "Founder, B2B SaaS"
-    }
-  ],
+  "stories": {
+    "id": "scenarios",
+    "eyebrow": "Where it fits",
+    "titleLine1": "Common ways teams",
+    "titleLine2": "use Agentic Chat",
+    "items": [
+      {
+        "headline": "Support that answers before the queue",
+        "metric": "for repeat questions and order lookups",
+        "body": "The workflow identifies the customer, looks up their order and lets the agent answer. Anything unusual goes to a support queue with the whole chat attached.",
+        "fit": "Fits: customer success and support teams"
+      },
+      {
+        "headline": "Sales conversations after hours",
+        "metric": "for pricing questions and demo requests",
+        "body": "Visitors ask about pricing at midnight. The agent answers, captures the lead and offers a meeting, so your team starts the day with context.",
+        "fit": "Fits: founders and B2B sales teams"
+      }
+    ]
+  },
   "enterprise": {
     "eyebrow": "Built for customer-facing work",
     "titleLine1": "Reliable. Controllable.",
     "titleLine2": "Ready to ship.",
-    "subtitle": "Deploy agents with the governance teams expect — isolation, guardrails, and clear handoff paths.",
+    "subtitle": "Run chat agents with the governance teams expect: isolation, guardrails and clear hand-off paths.",
     "cards": [
       {
         "title": "Security and control",
-        "description": "Tenant isolation, scoped execution, and protected service boundaries."
+        "description": "Tenant isolation, scoped execution and protected service boundaries."
       },
       {
         "title": "Observability",
-        "description": "Chat history, lead outcomes, and usage so you know what the agent is doing."
+        "description": "Chat history, lead outcomes and usage, so you know what the agent is doing."
       },
       {
         "title": "Human-in-the-loop",
-        "description": "Escalate by policy with full context — never a black box dead end."
+        "description": "Escalate by policy with full context. Never a black-box dead end."
       },
       {
         "title": "AI guardrails",
@@ -212,14 +367,23 @@
   },
   "pricing": {
     "title": "Simple, transparent pricing",
-    "subtitle": "Start free. Pick the capacity you need — credits and limits are clear up front.",
+    "subtitle": "Start free. Pick the chat capacity you need, with limits clear up front.",
+    "liveHosts": [
+      "divvylore.com",
+      "www.divvylore.com"
+    ],
     "plans": [
       {
         "name": "Starter",
         "price": "$29",
         "period": "/month",
-        "description": "For teams launching their first AI agent on a site.",
-        "features": ["1 production agent", "Portal access", "Basic analytics", "Email support"],
+        "description": "For teams putting their first chat agent on a website.",
+        "features": [
+          "1 production chat agent",
+          "Website chat widget",
+          "Chat history and leads",
+          "Email support"
+        ],
         "highlighted": false,
         "ctaLabel": "Choose Starter",
         "planCode": "starter"
@@ -228,11 +392,11 @@
         "name": "Growth",
         "price": "$99",
         "period": "/month",
-        "description": "For teams running sales and support agents in production.",
+        "description": "For teams running sales and support chat in production.",
         "features": [
-          "5 production agents",
-          "Advanced configuration",
-          "Queue-first chat flow",
+          "5 production chat agents",
+          "Workflows and data lookups",
+          "Live chat, hand-off and queues",
           "Priority support"
         ],
         "highlighted": true,
@@ -246,7 +410,7 @@
         "description": "For organizations that need governance and dedicated onboarding.",
         "features": [
           "Custom agent limits",
-          "Tenant governance",
+          "Messaging channels at scale",
           "Dedicated onboarding",
           "Architecture support"
         ],
@@ -260,30 +424,51 @@
     "title": "Frequently asked questions",
     "items": [
       {
-        "question": "Do I need a website first, or can I start with an agent?",
-        "answer": "Either path works. Start with an agent on an existing site, launch a new site then add the agent, or begin with content that feeds both."
+        "question": "Do I need a new website to use Agentic Chat?",
+        "answer": "No. Add the chat widget to the site you already have. It works on any website where you can paste a snippet."
       },
       {
         "question": "Is this only for support chat?",
-        "answer": "No. Divvylore covers sales and support — lead capture, resolution, website publishing, and content that keeps the agent informed."
+        "answer": "No. The same agent handles sales and support: answering questions, capturing leads, looking up records and handing off to your team."
+      },
+      {
+        "question": "Can the agent use our own data?",
+        "answer": "Yes. Workflows can identify the visitor and look them up in your own system before the agent replies, so answers use real context."
+      },
+      {
+        "question": "Can we keep a human in the loop?",
+        "answer": "Yes. Hand conversations to people through support queues and live chat, with the full history attached."
+      },
+      {
+        "question": "Which channels are supported?",
+        "answer": "Your website chat widget, plus WhatsApp, Messenger and Telegram for the same agent."
       },
       {
         "question": "Where do registration and login happen?",
         "answer": "All account actions happen in app.divvylore.com."
       },
       {
-        "question": "Can we keep a human in the loop?",
-        "answer": "Yes. Escalate complex or high-stakes conversations to people with full context."
+        "question": "Need a website that ranks?",
+        "answer": "Our sister product builds fast, SEO-ready websites and grows them with content. Agentic Chat plugs into it when you have both.",
+        "link": {
+          "label": "See openhlink.com",
+          "url": "https://openhlink.com"
+        }
       }
     ]
   },
   "closing": {
     "titleLine1": "Simple enough to launch.",
-    "titleLine2": "Powerful enough to run on autopilot.",
-    "subtitle": "Join the teams putting sales and support on their website — with AI agents they can see and control.",
+    "titleLine2": "Smart enough to run around the clock.",
+    "subtitle": "Answer every visitor on your website with AI chat agents you can see and control.",
     "cta": "Start building"
   },
   "footer": {
-    "copyright": "© 2026 Divvylore. All rights reserved."
+    "copyright": "© 2026 Divvylore. All rights reserved.",
+    "crossLink": {
+      "text": "Need a website that ranks?",
+      "label": "See openhlink.com",
+      "url": "https://openhlink.com"
+    }
   }
 }

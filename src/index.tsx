@@ -1,12 +1,15 @@
 import { BrowserRouter } from "react-router-dom";
 import { createRoot } from "react-dom/client";
+import { LazyMotion, domAnimation } from "framer-motion";
 
 import Router from "./router";
 
 const App = () => (
-  <BrowserRouter>
-    <Router />
-  </BrowserRouter>
+  <LazyMotion features={domAnimation} strict>
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
+  </LazyMotion>
 );
 
 const rootElement = document.getElementById("root");

@@ -47,7 +47,7 @@ export const FooterBrandName = styled.span`
 
 export const FooterTag = styled.p`
   margin: 0;
-  color: rgba(245, 245, 247, 0.5);
+  color: rgba(245, 245, 247, 0.72);
   line-height: 1.65;
   max-width: 340px;
 `;
@@ -72,7 +72,7 @@ export const FooterCol = styled.div`
   align-content: start;
 `;
 
-export const FooterColTitle = styled.h4`
+export const FooterColTitle = styled.h2`
   margin: 0 0 0.35rem;
   color: #ffffff;
   font-size: 0.78rem;
@@ -82,7 +82,7 @@ export const FooterColTitle = styled.h4`
 `;
 
 export const FooterLink = styled.a`
-  color: rgba(245, 245, 247, 0.58);
+  color: rgba(245, 245, 247, 0.74);
   font-size: 0.95rem;
   line-height: 1.5;
   transition: color 0.15s ease;
@@ -102,7 +102,7 @@ export const FooterBottom = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 0.8rem;
-  color: rgba(245, 245, 247, 0.4);
+  color: rgba(245, 245, 247, 0.68);
   font-size: 0.85rem;
 `;
 
