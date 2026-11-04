@@ -78,6 +78,10 @@ import {
   PlanCredits,
   PlanCta,
   PlanFeatureList,
+  PlanIncludes,
+  PlanIncludesTitle,
+  PlanIncludesList,
+  PlanProducts,
   PlanFeatureItem,
   FaqBlock,
   FaqList,
@@ -117,7 +121,10 @@ type PricingPlanResponse = {
   isVisible?: boolean | null;
   displayOrder?: number;
   isCustomPricing?: boolean;
+  products?: string[];
 };
+
+type ProductResponse = { key: string; name?: string; highlights?: string[] };
 
 type AudienceRole = {
   id: string;
@@ -186,6 +193,10 @@ const Home = () => {
   const [cycle, setCycle] = useState<BillingCycle>("monthly");
   const fallbackPlans = useMemo(() => buildFallbackPlans(content), [content]);
   const [plans, setPlans] = useState<PricingPlanResponse[]>(fallbackPlans);
+  // What every plan of this site's product includes, and the names of the products a bundle sells:
+  // the platform's product catalog, else the site's own copy.
+  const [includes, setIncludes] = useState<string[]>(content.pricing?.includes || []);
+  const [productNames, setProductNames] = useState<Record<string, string>>({});
   const productBlocks = content.productBlocks || [];
 
   useEffect(() => {
@@ -233,7 +244,25 @@ const Home = () => {
         // Keep the fallback plans silently.
       }
     };
+    const loadProducts = async () => {
+      try {
+        const response = await fetch(`${PRICING_API_BASE}/account/tenant/products`, {
+          method: "GET",
+          headers: { Accept: "application/json" },
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error(`Products API returned ${response.status}`);
+        const data = (await response.json()) as ProductResponse[];
+        if (!Array.isArray(data)) throw new Error("Products API response is not a product list");
+        setProductNames(Object.fromEntries(data.map((product) => [product.key, product.name || product.key])));
+        const own = data.find((product) => product.key === PRODUCT)?.highlights || [];
+        if (own.length > 0) setIncludes(own);
+      } catch {
+        // Keep the site's own copy silently.
+      }
+    };
     loadPlans();
+    loadProducts();
     return () => controller.abort();
   }, []);
 
@@ -540,6 +569,19 @@ const Home = () => {
           <Container>
             <DisplayTitle>{content.pricing?.title}</DisplayTitle>
             <SectionLead>{content.pricing?.subtitle}</SectionLead>
+            {includes.length > 0 && (
+              <PlanIncludes aria-label={content.pricing?.includesTitle}>
+                <PlanIncludesTitle>{content.pricing?.includesTitle}</PlanIncludesTitle>
+                <PlanIncludesList>
+                  {includes.map((line) => (
+                    <PlanFeatureItem key={line}>
+                      <CheckCircle2 size={16} color="#2dd4bf" aria-hidden="true" />
+                      <span>{line}</span>
+                    </PlanFeatureItem>
+                  ))}
+                </PlanIncludesList>
+              </PlanIncludes>
+            )}
             <BillingToggle role="group" aria-label="Billing cycle">
               <BillingToggleBtn
                 type="button"
@@ -581,6 +623,11 @@ const Home = () => {
                     {plan.isPopular && !isUnavailable && <PlanBadge>Most popular</PlanBadge>}
                     {isUnavailable && <PlanBadge>Unavailable</PlanBadge>}
                     <PlanName>{plan.name}</PlanName>
+                    {(plan.products?.length || 0) > 1 && (
+                      <PlanProducts>
+                        Includes {plan.products!.map((key) => productNames[key] || key).join(" + ")}
+                      </PlanProducts>
+                    )}
                     <PlanPrice>
                       {plan.isCustomPricing ? (
                         <PlanAmount>Custom</PlanAmount>
