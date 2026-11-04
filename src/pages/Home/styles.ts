@@ -1002,6 +1002,39 @@ export const PlanFeatureList = styled.ul`
   align-content: start;
 `;
 
+/** What every plan of the site's product includes, shown once above the plans. */
+export const PlanIncludes = styled.section`
+  margin: 1.6rem 0 0;
+  padding: 1.1rem 1.25rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+`;
+
+export const PlanIncludesTitle = styled.h3`
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+`;
+
+export const PlanIncludesList = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+`;
+
+/** The products a bundle plan sells, under its name. */
+export const PlanProducts = styled.p`
+  margin: -0.35rem 0 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #a5f3fc;
+`;
+
 export const PlanFeatureItem = styled.li`
   display: flex;
   align-items: flex-start;

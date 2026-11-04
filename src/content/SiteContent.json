@@ -368,6 +368,14 @@
   "pricing": {
     "title": "Simple, transparent pricing",
     "subtitle": "Start free. Pick the chat capacity you need, with limits clear up front.",
+    "includesTitle": "Every plan includes",
+    "includes": [
+      "AI agents that answer sales and support questions on your website, day and night",
+      "Answers grounded in your own documents, pages and data",
+      "Live chat with hand-off to your team, and support queues",
+      "Chat workflows that identify visitors, capture leads and bring in a person when needed",
+      "Every conversation kept, searchable in chat history"
+    ],
     "liveHosts": [
       "divvylore.com",
       "www.divvylore.com"
