@@ -67,6 +67,7 @@ import {
   EnterpriseCard,
   BillingToggle,
   BillingToggleBtn,
+  PricingToggles,
   PlanGrid,
   PlanCard,
   PlanBadge,
@@ -117,6 +118,8 @@ type PricingPlanResponse = {
   features?: PlanFeatureResponse[];
   buttonText?: string;
   isPopular?: boolean;
+  badgeText?: string;
+  isTrial?: boolean;
   isActive?: boolean;
   isVisible?: boolean | null;
   displayOrder?: number;
@@ -267,6 +270,34 @@ const Home = () => {
   }, []);
 
   const activePlans = useMemo(() => plans.filter((plan) => plan.name), [plans]);
+  // The plan groups a visitor switches between, read from the plans themselves: this site's product
+  // on its own first, then each bundle (one group per set of products the plans sell). A trial shows
+  // in every group whose products it gives.
+  const planViews = useMemo(() => {
+    const sells = (plan: PricingPlanResponse) => (plan.products?.length ? plan.products : [PRODUCT]);
+    const keyOf = (plan: PricingPlanResponse) => Array.from(new Set(sells(plan))).sort().join("+");
+    const keys = Array.from(new Set(activePlans.filter((plan) => !plan.isTrial).map(keyOf))).sort(
+      (a, b) =>
+        Number(b === PRODUCT) - Number(a === PRODUCT) ||
+        a.split("+").length - b.split("+").length ||
+        a.localeCompare(b),
+    );
+    return keys.map((key) => {
+      const parts = key.split("+");
+      return {
+        key,
+        parts,
+        plans: activePlans.filter((plan) =>
+          plan.isTrial ? parts.every((k) => sells(plan).includes(k)) : keyOf(plan) === key,
+        ),
+      };
+    });
+  }, [activePlans]);
+  const [viewKey, setViewKey] = useState("");
+  const currentView = planViews.find((view) => view.key === viewKey) || planViews[0];
+  const shownPlans = currentView?.plans || activePlans;
+  // The switch waits for the product names, so it never shows raw keys.
+  const showViews = planViews.length > 1 && planViews.every((view) => view.parts.every((k) => productNames[k]));
   const cycleLabel = cycle === "monthly" ? "/month" : "/year";
   const source =
     typeof window !== "undefined" ? window.location.hostname : content.brand?.domain || "";
@@ -582,6 +613,26 @@ const Home = () => {
                 </PlanIncludesList>
               </PlanIncludes>
             )}
+            <PricingToggles>
+            {showViews && (
+              <BillingToggle role="group" aria-label={content.pricing?.viewsLabel}>
+                {planViews.map((view) => (
+                  <BillingToggleBtn
+                    key={view.key}
+                    type="button"
+                    className={view.key === currentView?.key ? "active" : ""}
+                    aria-pressed={view.key === currentView?.key}
+                    onClick={() => setViewKey(view.key)}
+                  >
+                    {/* Named in the catalog's order, the same on every site. */}
+                    {[...view.parts]
+                      .sort((a, b) => Object.keys(productNames).indexOf(a) - Object.keys(productNames).indexOf(b))
+                      .map((k) => productNames[k])
+                      .join(" + ")}
+                  </BillingToggleBtn>
+                ))}
+              </BillingToggle>
+            )}
             <BillingToggle role="group" aria-label="Billing cycle">
               <BillingToggleBtn
                 type="button"
@@ -600,9 +651,10 @@ const Home = () => {
                 Yearly
               </BillingToggleBtn>
             </BillingToggle>
+            </PricingToggles>
 
             <PlanGrid>
-              {activePlans.map((plan) => {
+              {shownPlans.map((plan) => {
                 const isUnavailable = plan.isActive === false || plan.isVisible === false;
                 const planPrice = cycle === "monthly" ? plan.monthlyPrice : plan.yearlyPrice;
                 const credits = cycle === "monthly" ? plan.monthlyCredits : plan.yearlyCredits;
@@ -620,7 +672,9 @@ const Home = () => {
 
                 return (
                   <PlanCard key={plan.id || plan.name} featured={!!plan.isPopular} muted={isUnavailable}>
-                    {plan.isPopular && !isUnavailable && <PlanBadge>Most popular</PlanBadge>}
+                    {!isUnavailable && (plan.badgeText || (plan.isPopular && content.pricing?.popularLabel)) && (
+                      <PlanBadge>{plan.badgeText || content.pricing?.popularLabel}</PlanBadge>
+                    )}
                     {isUnavailable && <PlanBadge>Unavailable</PlanBadge>}
                     <PlanName>{plan.name}</PlanName>
                     {(plan.products?.length || 0) > 1 && (

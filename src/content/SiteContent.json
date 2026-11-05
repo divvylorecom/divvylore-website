@@ -369,6 +369,8 @@
     "title": "Simple, transparent pricing",
     "subtitle": "Start free. Pick the chat capacity you need, with limits clear up front.",
     "includesTitle": "Every plan includes",
+    "viewsLabel": "Plans",
+    "popularLabel": "Most popular",
     "includes": [
       "AI agents that answer sales and support questions on your website, day and night",
       "Answers grounded in your own documents, pages and data",
