@@ -371,6 +371,149 @@
     "includesTitle": "Every plan includes",
     "viewsLabel": "Plans",
     "popularLabel": "Most popular",
+    "credits": {
+      "monthly": "{n} AI credits every month",
+      "yearly": "{n} AI credits a year",
+      "yearlyBonus": "{n} AI credits a year, {bonus} bonus included"
+    },
+    "perMonth": "/month",
+    "billedYearly": "Billed {total} a year",
+    "save": "Save {percent}%",
+    "saveUpTo": "Save up to {percent}%",
+    "saveAmount": "Save {amount} a year",
+    "plusTitle": "Everything in {plan}, plus:",
+    "keyRows": [
+      {
+        "field": "maxMessagesPerMonth",
+        "text": "Up to {n} messages a month"
+      },
+      {
+        "field": "maxAgents",
+        "text": "{n} AI agents",
+        "one": "1 AI agent",
+        "unlimited": "Unlimited AI agents"
+      },
+      {
+        "field": "maxUsers",
+        "text": "{n} team members",
+        "one": "1 team member",
+        "unlimited": "Unlimited team members"
+      },
+      {
+        "field": "maxPages",
+        "text": "{n} knowledge pages",
+        "one": "1 knowledge page",
+        "unlimited": "Unlimited knowledge pages"
+      },
+      {
+        "field": "maxWebsites",
+        "text": "{n} websites",
+        "one": "1 website",
+        "unlimited": "Unlimited websites"
+      },
+      {
+        "field": "maxPostsPerMonth",
+        "text": "Up to {n} posts a month"
+      }
+    ],
+    "creditsNote": "AI replies, posts and other AI work use credits. Each plan includes the credits shown; when they run out, buy more or upgrade anytime. Limits are the most a plan allows.",
+    "compare": {
+      "title": "Compare all plans",
+      "label": "Plan comparison",
+      "featureHeading": "Feature",
+      "included": "Included",
+      "notIncluded": "Not included",
+      "rows": [
+        {
+          "field": "monthlyCredits",
+          "label": "AI credits each month",
+          "text": "{n}"
+        },
+        {
+          "field": "yearlyBonusCredits",
+          "label": "Bonus credits on yearly billing",
+          "text": "{n}"
+        },
+        {
+          "field": "maxMessagesPerMonth",
+          "label": "Messages a month",
+          "text": "Up to {n}",
+          "unlimited": "No cap, uses credits"
+        },
+        {
+          "field": "maxAgents",
+          "label": "AI agents",
+          "text": "{n}",
+          "unlimited": "Unlimited"
+        },
+        {
+          "field": "maxUsers",
+          "label": "Team members",
+          "text": "{n}",
+          "unlimited": "Unlimited"
+        },
+        {
+          "field": "maxDataSources",
+          "label": "Data sources",
+          "text": "{n}",
+          "unlimited": "Unlimited"
+        },
+        {
+          "field": "maxStorageGB",
+          "label": "Storage",
+          "text": "{n} GB",
+          "unlimited": "Unlimited"
+        },
+        {
+          "field": "maxPages",
+          "label": "Knowledge pages",
+          "text": "{n}",
+          "unlimited": "Unlimited"
+        },
+        {
+          "field": "maxWebsites",
+          "label": "Websites",
+          "text": "{n}",
+          "unlimited": "Unlimited"
+        },
+        {
+          "field": "maxPostsPerMonth",
+          "label": "Posts a month",
+          "text": "Up to {n}",
+          "unlimited": "No cap, uses credits"
+        },
+        {
+          "field": "canPurchaseCredits",
+          "label": "Buy more credits anytime",
+          "type": "yes"
+        },
+        {
+          "field": "creditRollover",
+          "label": "Unused credits roll over",
+          "type": "yes"
+        },
+        {
+          "field": "hasApiAccess",
+          "label": "API access",
+          "type": "yes"
+        },
+        {
+          "field": "hasWebhookSupport",
+          "label": "Webhooks",
+          "type": "yes"
+        },
+        {
+          "field": "hasCustomIntegrations",
+          "label": "Custom integrations",
+          "type": "yes"
+        },
+        {
+          "field": "hasPrioritySupport",
+          "label": "Priority support",
+          "type": "yes"
+        }
+      ]
+    },
     "trial": {
       "title": "Try it free for {days} days",
       "credits": "{credits} credits to use",
