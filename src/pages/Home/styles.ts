@@ -848,6 +848,13 @@ export const EnterpriseCard = styled.article`
   gap: 0.45rem;
 `;
 
+// The product switch and the billing switch, side by side, wrapping on a phone.
+export const PricingToggles = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.75rem;
+`;
+
 export const BillingToggle = styled.div`
   margin: 1.4rem 0 0;
   display: inline-flex;
