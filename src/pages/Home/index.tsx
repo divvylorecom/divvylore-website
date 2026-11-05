@@ -68,6 +68,10 @@ import {
   BillingToggle,
   BillingToggleBtn,
   PricingToggles,
+  TrialOffer,
+  TrialText,
+  TrialTitle,
+  TrialFacts,
   PlanGrid,
   PlanCard,
   PlanBadge,
@@ -120,6 +124,10 @@ type PricingPlanResponse = {
   isPopular?: boolean;
   badgeText?: string;
   isTrial?: boolean;
+  trialDurationDays?: number;
+  trialRequiresPaymentMethod?: boolean;
+  trialConvertsToPaid?: boolean;
+  trialConversionPlanId?: string;
   isActive?: boolean;
   isVisible?: boolean | null;
   displayOrder?: number;
@@ -273,6 +281,7 @@ const Home = () => {
   // The plan groups a visitor switches between, read from the plans themselves: this site's product
   // on its own first, then each bundle (one group per set of products the plans sell). A trial shows
   // in every group whose products it gives.
+  const isTrialOffer = (plan: PricingPlanResponse) => !!plan.isTrial && plan.trialConvertsToPaid !== false;
   const planViews = useMemo(() => {
     const sells = (plan: PricingPlanResponse) => (plan.products?.length ? plan.products : [PRODUCT]);
     const keyOf = (plan: PricingPlanResponse) => Array.from(new Set(sells(plan))).sort().join("+");
@@ -287,15 +296,35 @@ const Home = () => {
       return {
         key,
         parts,
-        plans: activePlans.filter((plan) =>
-          plan.isTrial ? parts.every((k) => sells(plan).includes(k)) : keyOf(plan) === key,
-        ),
+        plans: activePlans.filter((plan) => !isTrialOffer(plan) && keyOf(plan) === key),
+        trial: activePlans.find((plan) => isTrialOffer(plan) && parts.every((k) => sells(plan).includes(k))),
       };
     });
   }, [activePlans]);
   const [viewKey, setViewKey] = useState("");
   const currentView = planViews.find((view) => view.key === viewKey) || planViews[0];
-  const shownPlans = currentView?.plans || activePlans;
+  const shownPlans = currentView?.plans || activePlans.filter((plan) => !isTrialOffer(plan));
+  const trial = currentView ? currentView.trial : activePlans.find(isTrialOffer);
+  // The trial line, every value from the trial plan set in Admin; the words are the site's.
+  const trialFacts = (() => {
+    if (!trial) return [];
+    const words = content.pricing?.trial || {};
+    const fill = (text: string = "", values: Record<string, string>) =>
+      text.replace(/\{(\w+)\}/g, (_, name) => values[name] ?? "");
+    const facts: string[] = [];
+    if (trial.monthlyCredits > 0) facts.push(fill(words.credits, { credits: trial.monthlyCredits.toLocaleString() }));
+    if (!trial.trialRequiresPaymentMethod) {
+      facts.push(words.noCard);
+    } else {
+      const next = plans.find((plan) => plan.id === trial.trialConversionPlanId);
+      facts.push(
+        next && !next.isCustomPricing
+          ? fill(words.cardThenPlan, { plan: next.name, price: formatUsd(next.monthlyPrice), cycle: "/month" })
+          : words.card,
+      );
+    }
+    return facts.filter(Boolean);
+  })();
   // The switch waits for the product names, so it never shows raw keys.
   const showViews = planViews.length > 1 && planViews.every((view) => view.parts.every((k) => productNames[k]));
   const cycleLabel = cycle === "monthly" ? "/month" : "/year";
@@ -653,7 +682,30 @@ const Home = () => {
             </BillingToggle>
             </PricingToggles>
 
-            <PlanGrid>
+            {trial && (
+              <TrialOffer aria-label={trial.name}>
+                <TrialText>
+                  <TrialTitle>
+                    {(content.pricing?.trial?.title || "").replace("{days}", String(trial.trialDurationDays || 0))}
+                  </TrialTitle>
+                  <TrialFacts>{trialFacts.join(" · ")}</TrialFacts>
+                </TrialText>
+                <PlanCta
+                  href={`${APP_URL}${REGISTER_PATH}?${new URLSearchParams({
+                    source,
+                    product: PRODUCT,
+                    placement: "pricing",
+                    plan: trial.code || trial.id,
+                  }).toString()}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {trial.buttonText || content.pricing?.trial?.cta}
+                </PlanCta>
+              </TrialOffer>
+            )}
+
+            <PlanGrid $count={shownPlans.length}>
               {shownPlans.map((plan) => {
                 const isUnavailable = plan.isActive === false || plan.isVisible === false;
                 const planPrice = cycle === "monthly" ? plan.monthlyPrice : plan.yearlyPrice;

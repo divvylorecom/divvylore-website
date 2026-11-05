@@ -881,10 +881,11 @@ export const BillingToggleBtn = styled.button`
   }
 `;
 
-export const PlanGrid = styled.div`
+// As many columns as plans, up to four.
+export const PlanGrid = styled.div<{ $count?: number }>`
   margin-top: 2rem;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(${(p) => Math.min(Math.max(p.$count || 4, 1), 4)}, minmax(0, 1fr));
   gap: 1.35rem;
   align-items: stretch;
 
@@ -1007,6 +1008,37 @@ export const PlanFeatureList = styled.ul`
   display: grid;
   gap: 0.45rem;
   align-content: start;
+`;
+
+/** The free trial: one line above the paid plans, not a plan card. */
+export const TrialOffer = styled.section`
+  margin: 1.4rem 0 0;
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem 1.5rem;
+`;
+
+export const TrialText = styled.div`
+  display: grid;
+  gap: 0.2rem;
+`;
+
+export const TrialTitle = styled.h3`
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 750;
+  color: #ffffff;
+`;
+
+export const TrialFacts = styled.p`
+  margin: 0;
+  color: rgba(245, 245, 247, 0.75);
 `;
 
 /** What every plan of the site's product includes, shown once above the plans. */
