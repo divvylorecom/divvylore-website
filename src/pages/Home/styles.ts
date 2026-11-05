@@ -971,17 +971,163 @@ export const PlanDesc = styled.p`
   overflow: hidden;
 `;
 
-export const PlanCredits = styled.span`
-  display: inline-flex;
+/** Under a yearly price: what is billed a year and what it saves. */
+export const PlanBilled = styled.p`
+  margin: -0.45rem 0 0;
+  font-size: 0.84rem;
+  color: rgba(245, 245, 247, 0.72);
+`;
+
+export const PlanSave = styled.span`
+  color: #5eead4;
+  font-weight: 750;
+`;
+
+/** The numbers a plan gives, first on its card: credits, then the limits that matter for its products. */
+export const PlanKeyList = styled.ul`
+  margin: 0.2rem 0 0;
+  padding: 0.85rem 0.9rem;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+`;
+
+export const PlanKeyItem = styled.li`
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: #ffffff;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 0.15em;
+  }
+
+  strong {
+    font-weight: 800;
+  }
+`;
+
+export const PlanPlusTitle = styled.p`
+  margin: 0.3rem 0 -0.2rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #ffffff;
+`;
+
+/** What credits are for, under the plans. */
+export const PricingNote = styled.p`
+  margin: 1.2rem 0 0;
+  max-width: 62rem;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: rgba(245, 245, 247, 0.72);
+`;
+
+export const CompareBlock = styled.details`
+  margin: 1.4rem 0 0;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+
+  &[open] summary svg {
+    transform: rotate(45deg);
+  }
+`;
+
+export const CompareSummary = styled.summary`
+  display: flex;
   align-items: center;
-  font-size: 0.88rem;
-  padding: 0.32rem 0.65rem;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+  color: #ffffff;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  svg {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+`;
+
+/** The table scrolls on its own on a phone; the page never does. */
+export const CompareScroll = styled.div`
+  overflow-x: auto;
+  padding: 0 1.25rem 1.1rem;
+`;
+
+export const CompareTable = styled.table`
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+
+  th,
+  td {
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    vertical-align: middle;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  thead th {
+    border-top: 0;
+    font-weight: 750;
+    color: #ffffff;
+  }
+
+  tbody th {
+    font-weight: 600;
+    color: rgba(245, 245, 247, 0.8);
+  }
+
+  td {
+    color: #ffffff;
+  }
+
+  svg {
+    vertical-align: middle;
+  }
+`;
+
+/** Read by screen readers, not shown. */
+export const SrOnly = styled.span`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+`;
+
+/** On the Yearly switch: the most a yearly plan saves. */
+export const ToggleSave = styled.span`
+  margin-left: 0.4rem;
+  padding: 0.1rem 0.45rem;
   border-radius: 999px;
-  background: var(--accent-soft);
-  width: fit-content;
-  font-weight: 650;
-  color: #ddd6fe;
-  min-height: 1.85rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: rgba(45, 212, 191, 0.18);
+  color: #5eead4;
+
+  .active > & {
+    background: #ccfbf1;
+    color: #115e59;
+  }
 `;
 
 export const PlanCta = styled.a<{ muted?: boolean }>`

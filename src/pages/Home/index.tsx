@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
-import { ArrowRight, CheckCircle2, Plus } from "lucide-react";
+import { ArrowRight, Check, CheckCircle2, Minus, Plus } from "lucide-react";
 import siteContent from "../../content/SiteContent.json";
 import {
   Page,
@@ -80,8 +80,19 @@ import {
   PlanAmount,
   PlanCycle,
   PlanDesc,
-  PlanCredits,
   PlanCta,
+  PlanBilled,
+  PlanSave,
+  ToggleSave,
+  PlanKeyList,
+  PlanKeyItem,
+  PlanPlusTitle,
+  PricingNote,
+  CompareBlock,
+  CompareSummary,
+  CompareScroll,
+  CompareTable,
+  SrOnly,
   PlanFeatureList,
   PlanIncludes,
   PlanIncludesTitle,
@@ -107,6 +118,8 @@ type PlanFeatureResponse = {
   description?: string;
   isIncluded: boolean;
   displayOrder?: number;
+  /** "limits" for a line written from a plan limit; the numbers are shown from the plan instead. */
+  category?: string | null;
 };
 
 type PricingPlanResponse = {
@@ -133,9 +146,14 @@ type PricingPlanResponse = {
   displayOrder?: number;
   isCustomPricing?: boolean;
   products?: string[];
+  /** The plan's limits and options (maxUsers, maxWebsites, hasApiAccess…), read by name. */
+  [field: string]: unknown;
 };
 
-type ProductResponse = { key: string; name?: string; highlights?: string[] };
+type ProductResponse = { key: string; name?: string; highlights?: string[]; limits?: string[] };
+
+/** A plan number the site shows: the plan field, and its words with {n} for the number. */
+type LimitRow = { field: string; label?: string; text?: string; one?: string; unlimited?: string; type?: "yes" };
 
 type AudienceRole = {
   id: string;
@@ -160,6 +178,32 @@ const formatUsd = (amount: number) =>
     currency: "USD",
     maximumFractionDigits: amount % 1 === 0 ? 0 : 2,
   }).format(amount);
+
+const fill = (text: string = "", values: Record<string, string>) =>
+  text.replace(/\{(\w+)\}/g, (_, name) => values[name] ?? "");
+
+/**
+ * A plan number in words, or null when the plan does not say (the site's own fallback plans): 0 is
+ * unlimited, shown only where the row words it, so limits that use credits never read as unlimited.
+ */
+const limitLine = (row: LimitRow, value: unknown): string | null => {
+  if (typeof value !== "number") return null;
+  if (value <= 0) return row.unlimited || null;
+  return value === 1 && row.one ? row.one : fill(row.text, { n: value.toLocaleString("en-US") });
+};
+
+/** A line with its first number in bold, so the numbers lead. */
+const withNumber = (text: string) => {
+  const match = /\d[\d,.]*/.exec(text);
+  if (!match) return text;
+  return (
+    <>
+      {text.slice(0, match.index)}
+      <strong>{match[0]}</strong>
+      {text.slice(match.index + match[0].length)}
+    </>
+  );
+};
 
 const toNumber = (value: unknown): number => {
   const parsed = Number(value);
@@ -204,10 +248,15 @@ const Home = () => {
   const [cycle, setCycle] = useState<BillingCycle>("monthly");
   const fallbackPlans = useMemo(() => buildFallbackPlans(content), [content]);
   const [plans, setPlans] = useState<PricingPlanResponse[]>(fallbackPlans);
+  // The comparison table needs the platform's plans: the site's own fallback copy has no limits.
+  const [plansLive, setPlansLive] = useState(false);
   // What every plan of this site's product includes, and the names of the products a bundle sells:
   // the platform's product catalog, else the site's own copy.
   const [includes, setIncludes] = useState<string[]>(content.pricing?.includes || []);
   const [productNames, setProductNames] = useState<Record<string, string>>({});
+  // Which product each product-only limit belongs to (the catalog's `limits`), so a card shows only
+  // the limits of the products its plan sells.
+  const [limitOwners, setLimitOwners] = useState<Record<string, string>>({});
   const productBlocks = content.productBlocks || [];
 
   useEffect(() => {
@@ -250,7 +299,10 @@ const Home = () => {
             features: Array.isArray(plan.features) ? plan.features : [],
           }))
           .sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
-        if (normalized.length > 0) setPlans(normalized);
+        if (normalized.length > 0) {
+          setPlans(normalized);
+          setPlansLive(true);
+        }
       } catch {
         // Keep the fallback plans silently.
       }
@@ -266,6 +318,9 @@ const Home = () => {
         const data = (await response.json()) as ProductResponse[];
         if (!Array.isArray(data)) throw new Error("Products API response is not a product list");
         setProductNames(Object.fromEntries(data.map((product) => [product.key, product.name || product.key])));
+        setLimitOwners(
+          Object.fromEntries(data.flatMap((product) => (product.limits || []).map((limit) => [limit, product.key]))),
+        );
         const own = data.find((product) => product.key === PRODUCT)?.highlights || [];
         if (own.length > 0) setIncludes(own);
       } catch {
@@ -309,8 +364,6 @@ const Home = () => {
   const trialFacts = (() => {
     if (!trial) return [];
     const words = content.pricing?.trial || {};
-    const fill = (text: string = "", values: Record<string, string>) =>
-      text.replace(/\{(\w+)\}/g, (_, name) => values[name] ?? "");
     const facts: string[] = [];
     if (trial.monthlyCredits > 0) facts.push(fill(words.credits, { credits: trial.monthlyCredits.toLocaleString() }));
     if (!trial.trialRequiresPaymentMethod) {
@@ -327,7 +380,37 @@ const Home = () => {
   })();
   // The switch waits for the product names, so it never shows raw keys.
   const showViews = planViews.length > 1 && planViews.every((view) => view.parts.every((k) => productNames[k]));
-  const cycleLabel = cycle === "monthly" ? "/month" : "/year";
+  const pricing = content.pricing || {};
+  const sellsOf = (plan: PricingPlanResponse) => (plan.products?.length ? plan.products : [PRODUCT]);
+  // A product-only limit shows only on plans that sell its product.
+  const hasRow = (plan: PricingPlanResponse, field: string) =>
+    !limitOwners[field] || sellsOf(plan).includes(limitOwners[field]);
+  const yearlySaving = (plan: PricingPlanResponse) =>
+    plan.monthlyPrice > 0 && plan.yearlyPrice > 0
+      ? Math.round((1 - plan.yearlyPrice / (plan.monthlyPrice * 12)) * 100)
+      : 0;
+  const bestSaving = Math.max(0, ...shownPlans.map(yearlySaving));
+  const creditsLine = (plan: PricingPlanResponse) => {
+    const words = pricing.credits || {};
+    if (cycle === "monthly") {
+      return plan.monthlyCredits > 0 ? fill(words.monthly, { n: plan.monthlyCredits.toLocaleString("en-US") }) : null;
+    }
+    const bonus = plan.yearlyBonusCredits || 0;
+    const total = plan.yearlyCredits + bonus;
+    if (total <= 0) return null;
+    return bonus > 0
+      ? fill(words.yearlyBonus, { n: total.toLocaleString("en-US"), bonus: bonus.toLocaleString("en-US") })
+      : fill(words.yearly, { n: total.toLocaleString("en-US") });
+  };
+  // The lines written in Admin that are not limits; a higher plan lists only what the plan before it lacks.
+  const extrasOf = (plan: PricingPlanResponse) =>
+    (plan.features || [])
+      .filter((feature) => feature.isIncluded && feature.category !== "limits")
+      .sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
+  const compareRows = ((pricing.compare?.rows || []) as LimitRow[]).filter((row) =>
+    shownPlans.some((plan) => hasRow(plan, row.field) && plan[row.field] !== undefined),
+  );
+  const showCompare = plansLive && shownPlans.length > 1 && compareRows.length > 0;
   const source =
     typeof window !== "undefined" ? window.location.hostname : content.brand?.domain || "";
   const selectedRole = roles.find((role) => role.id === activeRole) || roles[0];
@@ -678,6 +761,14 @@ const Home = () => {
                 onClick={() => setCycle("yearly")}
               >
                 Yearly
+                {bestSaving > 0 && (
+                  <ToggleSave>
+                    {fill(
+                      shownPlans.every((plan) => yearlySaving(plan) === bestSaving) ? pricing.save : pricing.saveUpTo,
+                      { percent: String(bestSaving) },
+                    )}
+                  </ToggleSave>
+                )}
               </BillingToggleBtn>
             </BillingToggle>
             </PricingToggles>
@@ -706,14 +797,22 @@ const Home = () => {
             )}
 
             <PlanGrid $count={shownPlans.length}>
-              {shownPlans.map((plan) => {
+              {shownPlans.map((plan, index) => {
                 const isUnavailable = plan.isActive === false || plan.isVisible === false;
-                const planPrice = cycle === "monthly" ? plan.monthlyPrice : plan.yearlyPrice;
-                const credits = cycle === "monthly" ? plan.monthlyCredits : plan.yearlyCredits;
-                const bonus = cycle === "yearly" ? plan.yearlyBonusCredits || 0 : 0;
-                const planFeatures = (plan.features || [])
-                  .filter((feature) => feature.isIncluded)
-                  .sort((a, b) => (a.displayOrder ?? 999) - (b.displayOrder ?? 999));
+                const isYearly = cycle === "yearly" && plan.yearlyPrice > 0;
+                // Yearly shows what a month costs, with what is billed and what it saves.
+                const planPrice = isYearly ? Math.round((plan.yearlyPrice / 12) * 100) / 100 : plan.monthlyPrice;
+                // What a year costs less than twelve months, in dollars on the card.
+                const saving = isYearly ? Math.round((plan.monthlyPrice * 12 - plan.yearlyPrice) * 100) / 100 : 0;
+                const keyLines = [
+                  creditsLine(plan),
+                  ...((pricing.keyRows || []) as LimitRow[])
+                    .filter((row) => hasRow(plan, row.field))
+                    .map((row) => limitLine(row, plan[row.field])),
+                ].filter((line): line is string => !!line);
+                const previous = index > 0 ? shownPlans[index - 1] : null;
+                const previousExtras = new Set(previous ? extrasOf(previous).map((feature) => feature.name) : []);
+                const extras = extrasOf(plan).filter((feature) => !previousExtras.has(feature.name));
                 const query = new URLSearchParams({
                   source,
                   product: PRODUCT,
@@ -740,17 +839,22 @@ const Home = () => {
                       ) : (
                         <>
                           <PlanAmount>{formatUsd(planPrice)}</PlanAmount>
-                          <PlanCycle>{cycleLabel}</PlanCycle>
+                          <PlanCycle>{pricing.perMonth}</PlanCycle>
                         </>
                       )}
                     </PlanPrice>
-                    <PlanDesc>{plan.description}</PlanDesc>
-                    {credits > 0 && (
-                      <PlanCredits>
-                        {credits.toLocaleString()} credits / {cycle === "monthly" ? "mo" : "yr"}
-                        {bonus > 0 ? ` · +${bonus.toLocaleString()} bonus` : ""}
-                      </PlanCredits>
+                    {isYearly && !plan.isCustomPricing && (
+                      <PlanBilled>
+                        {fill(pricing.billedYearly, { total: formatUsd(plan.yearlyPrice) })}
+                        {saving > 0 && (
+                          <>
+                            {" · "}
+                            <PlanSave>{fill(pricing.saveAmount, { amount: formatUsd(saving) })}</PlanSave>
+                          </>
+                        )}
+                      </PlanBilled>
                     )}
+                    <PlanDesc>{plan.description}</PlanDesc>
                     <PlanCta
                       href={isUnavailable ? undefined : `${APP_URL}${REGISTER_PATH}?${query}`}
                       muted={isUnavailable}
@@ -763,18 +867,89 @@ const Home = () => {
                     >
                       {isUnavailable ? "Not available" : plan.buttonText || "Get started"}
                     </PlanCta>
-                    <PlanFeatureList>
-                      {planFeatures.map((feature) => (
-                        <PlanFeatureItem key={`${plan.name}-${feature.name}`}>
-                          <CheckCircle2 size={16} color="#2dd4bf" />
-                          <span>{feature.name}</span>
-                        </PlanFeatureItem>
-                      ))}
-                    </PlanFeatureList>
+                    {keyLines.length > 0 && (
+                      <PlanKeyList>
+                        {keyLines.map((line) => (
+                          <PlanKeyItem key={`${plan.name}-${line}`}>
+                            <CheckCircle2 size={16} color="#2dd4bf" aria-hidden="true" />
+                            <span>{withNumber(line)}</span>
+                          </PlanKeyItem>
+                        ))}
+                      </PlanKeyList>
+                    )}
+                    {extras.length > 0 && previous && (
+                      <PlanPlusTitle>{fill(pricing.plusTitle, { plan: previous.name })}</PlanPlusTitle>
+                    )}
+                    {extras.length > 0 && (
+                      <PlanFeatureList>
+                        {extras.map((feature) => (
+                          <PlanFeatureItem key={`${plan.name}-${feature.name}`}>
+                            <CheckCircle2 size={16} color="#2dd4bf" aria-hidden="true" />
+                            <span>{feature.name}</span>
+                          </PlanFeatureItem>
+                        ))}
+                      </PlanFeatureList>
+                    )}
                   </PlanCard>
                 );
               })}
             </PlanGrid>
+
+            {pricing.creditsNote && <PricingNote>{pricing.creditsNote}</PricingNote>}
+
+            {showCompare && (
+              <CompareBlock>
+                <CompareSummary>
+                  <span>{pricing.compare?.title}</span>
+                  <Plus size={18} aria-hidden="true" />
+                </CompareSummary>
+                <CompareScroll>
+                  <CompareTable aria-label={pricing.compare?.label}>
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          <SrOnly>{pricing.compare?.featureHeading}</SrOnly>
+                        </th>
+                        {shownPlans.map((plan) => (
+                          <th scope="col" key={plan.id || plan.name}>
+                            {plan.name}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {compareRows.map((row) => (
+                        <tr key={row.field}>
+                          <th scope="row">{row.label}</th>
+                          {shownPlans.map((plan) => {
+                            const value = plan[row.field];
+                            const yes = row.type === "yes" ? value === true : null;
+                            const text = row.type === "yes" ? null : hasRow(plan, row.field) ? limitLine(row, value) : null;
+                            return (
+                              <td key={plan.id || plan.name}>
+                                {yes === true && (
+                                  <>
+                                    <Check size={18} color="#2dd4bf" aria-hidden="true" />
+                                    <SrOnly>{pricing.compare?.included}</SrOnly>
+                                  </>
+                                )}
+                                {(yes === false || (row.type !== "yes" && !text)) && (
+                                  <>
+                                    <Minus size={18} aria-hidden="true" />
+                                    <SrOnly>{pricing.compare?.notIncluded}</SrOnly>
+                                  </>
+                                )}
+                                {text}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </CompareTable>
+                </CompareScroll>
+              </CompareBlock>
+            )}
           </Container>
         </FlatSection>
 
