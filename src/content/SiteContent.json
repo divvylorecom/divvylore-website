@@ -371,6 +371,14 @@
     "includesTitle": "Every plan includes",
     "viewsLabel": "Plans",
     "popularLabel": "Most popular",
+    "trial": {
+      "title": "Try it free for {days} days",
+      "credits": "{credits} credits to use",
+      "noCard": "No card needed",
+      "card": "Card needed, billed when the trial ends unless you cancel",
+      "cardThenPlan": "Card needed, then {plan} at {price}{cycle} unless you cancel",
+      "cta": "Start free trial"
+    },
     "includes": [
       "AI agents that answer sales and support questions on your website, day and night",
       "Answers grounded in your own documents, pages and data",
