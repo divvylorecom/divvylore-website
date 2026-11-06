@@ -352,7 +352,11 @@ const Home = () => {
         key,
         parts,
         plans: activePlans.filter((plan) => !isTrialOffer(plan) && keyOf(plan) === key),
-        trial: activePlans.find((plan) => isTrialOffer(plan) && parts.every((k) => sells(plan).includes(k))),
+        // The trial for exactly these products (a product's own trial becomes that product's plan),
+        // else a trial that gives them all.
+        trial:
+          activePlans.find((plan) => isTrialOffer(plan) && keyOf(plan) === key) ||
+          activePlans.find((plan) => isTrialOffer(plan) && parts.every((k) => sells(plan).includes(k))),
       };
     });
   }, [activePlans]);
