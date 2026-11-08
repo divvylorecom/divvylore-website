@@ -1,25 +1,25 @@
 {
   "short_name": "Divvylore",
-  "name": "Divvylore - Sharkbits",
+  "name": "Divvylore Agentic Chat",
   "icons": [
     {
-      "src": "img/icons/logo.png",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "img/svg/logo.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
     },
     {
-      "src": "img/icons/logo.png",
+      "src": "img/icons/logo192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "img/icons/logo.png",
+      "src": "img/icons/logo512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#7b1fd6",
   "background_color": "#ffffff"
 }
